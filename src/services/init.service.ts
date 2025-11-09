@@ -84,7 +84,7 @@ const _generateVscodeConfig = (shouldGenerate: boolean): void => {
   }
 };
 
-const _generateReadme = (year: string): void => {};
+const _generateReadme = (): void => {};
 
 const _generateTestsConfig = (shouldGenerate: boolean): void => {
   if (!shouldGenerate) {
