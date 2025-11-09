@@ -52,7 +52,7 @@ const handleInit = async (): Promise<void> => {
 
   _installDependencies(dependencies);
   _generateVscodeConfig(vscode);
-  _generateReadme(year);
+  _generateReadme();
   _generateTestsConfig(tests);
 };
 
