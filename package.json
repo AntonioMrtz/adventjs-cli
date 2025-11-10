@@ -7,6 +7,8 @@
   "main": "index.ts",
   "scripts": {
     "start": "tsc && node dist/index.js",
+    "dev": "DEV=true tsc && npm run copy:html && node dist/index.js",
+    "copy:html": "node scripts/copy-html.js",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write .",
@@ -14,12 +16,15 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "dependencies": {
-    "chalk": "^5.6.2",
+    "chalk": "^4.1.2",
+    "cheerio": "^1.1.2",
     "commander": "^14.0.2",
+    "dotenv": "^17.2.3",
     "inquirer": "^12.11.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/cheerio": "^0.22.35",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.0",
     "@typescript-eslint/eslint-plugin": "^8.46.3",

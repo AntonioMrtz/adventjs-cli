@@ -21,6 +21,18 @@
       "preLaunchTask": "tsc: build index.ts",
       "args": ["g", "1"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    },
+    {
+      "name": "Debug: g <day> DEV",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/dist/index.js",
+      "preLaunchTask": "tsc: build index.ts (DEV)",
+      "args": ["g", "1"],
+      "env": {
+        "DEV": "true"
+      },
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     }
   ]
 }

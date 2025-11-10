@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import { getChalkLogger } from './chalk.service';
 import inquirer from 'inquirer';
 import { DependenciesAnswer, TestsAnswer, VscodeAnswer, YearAnswer } from '../schema/answer.schema';
 import { exec } from 'child_process';
@@ -7,6 +7,8 @@ import { DEV_DEPENDENCIES } from '../schema/dependencies.schema';
 import { CONFIG_FILE } from '../schema/app.schema';
 
 export { handleInit };
+
+const chalk = getChalkLogger();
 
 const handleInit = async (): Promise<void> => {
   console.log(

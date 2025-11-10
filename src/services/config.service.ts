@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import { getChalkLogger } from './chalk.service';
 import { CONFIG_FILE } from '../schema/app.schema';
 import { ConfigSchema } from '../schema/config.schema';
 import { promisify } from 'util';
@@ -7,6 +7,7 @@ import { readFile } from 'fs';
 export { parseConfig, readConfigAsync };
 
 const readConfigAsync = promisify(readFile);
+const chalk = getChalkLogger();
 
 const parseConfig = async (): Promise<ConfigSchema | null> => {
   try {

@@ -16,14 +16,32 @@
       "label": "tsc: build index.ts",
       "type": "shell",
       "command": "${workspaceFolder}/node_modules/.bin/tsc",
+      "args": [],
+      "problemMatcher": ["$tsc"],
+      "group": "build",
+      "presentation": {
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "tsc: build index.ts (DEV)",
+      "type": "shell",
+      "command": "sh",
       "args": [
-        "${workspaceFolder}/src/index.ts",
-        "--outDir",
-        "${workspaceFolder}/dist",
-        "--sourceMap"
+        "-c",
+        "${workspaceFolder}/node_modules/.bin/tsc && node ${workspaceFolder}/scripts/copy-html.js"
       ],
       "problemMatcher": ["$tsc"],
       "group": "build",
+      "presentation": {
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "copy:html",
+      "type": "shell",
+      "command": "node",
+      "args": ["${workspaceFolder}/scripts/copy-html.js"],
       "presentation": {
         "reveal": "silent"
       }

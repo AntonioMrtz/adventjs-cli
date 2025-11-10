@@ -45,3 +45,6 @@ jest-coverage/
 
 # CLI config files
 adventjs-cli.json
+
+# Generated challenge files
+01/**
