@@ -1,8 +1,8 @@
 import { getChalkLogger } from './chalk.service';
-import { CONFIG_FILE } from '../schema/app.schema';
 import { ConfigSchema } from '../schema/config.schema';
 import { promisify } from 'util';
 import { readFile } from 'fs';
+import { CONFIG_FILE } from './file.service';
 
 export { parseConfig, readConfigAsync };
 
@@ -11,12 +11,12 @@ const chalk = getChalkLogger();
 
 const parseConfig = async (): Promise<ConfigSchema | null> => {
   try {
-    const data = await readConfigAsync(CONFIG_FILE, 'utf8');
+    const data = await readConfigAsync(CONFIG_FILE.CONFIG, 'utf8');
     return JSON.parse(data);
   } catch {
     console.error(
       chalk.red(
-        '❌ Configuration file adventjs-cli.json not found. Please run "adventjs-cli init" first.',
+        `❌ Configuration file ${CONFIG_FILE.CONFIG} not found. Please run "adventjs-cli init" first.`,
       ),
     );
     return null;

@@ -1,11 +1,11 @@
 import { parseConfig } from './config.service';
 import { getChalkLogger } from './chalk.service';
-import { writeFileSync, mkdirSync } from 'fs';
-import { join } from 'path';
-import { htmlToMarkdown } from './markdown.service';
+import { addDayHeader, htmlToMarkdown } from './markdown.service';
 import { isDev } from './dev.service';
 import { fetchChallenge, fetchChallengeDev } from '../api/challenge.api';
 import { scrapeDescription } from './scrapping.service';
+import { createFile, createFolderUnderRoot, SavePath } from './file.service';
+import { formatDayNumber } from './parsing.service';
 
 export { handleGenerateDay };
 
@@ -39,23 +39,26 @@ const handleGenerateDay = async (day: string): Promise<void> => {
   }
 
   const markdown = htmlToMarkdown(challengeDescription);
+  const markdownWithHeader = addDayHeader(markdown, dayNumber);
 
-  _saveDay(markdown, config.year, dayNumber);
+  _saveDayFiles(markdownWithHeader, config.year, dayNumber);
 
   console.log(
     chalk.green(`✅ Challenge ${dayNumber} for year ${config.year} generated successfully.`),
   );
 };
 
-const _saveDay = (descriptionMarkdown: string, year: string | number, day: number): void => {
-  const dayFormatted = String(day).padStart(2, '0');
-  const folderName = dayFormatted;
-  const folderPath = join(process.cwd(), folderName);
-  const fileName = `${dayFormatted}.md`;
-  const filePath = join(folderPath, fileName);
+const _saveDayFiles = (descriptionMarkdown: string, year: string, day: number): void => {
+  console.log(chalk.blue(`Generating files for Day ${day}...`));
+  const dayFormatted = formatDayNumber(String(day));
+  const dayFolderName = dayFormatted;
 
-  // Create folder if it doesn't exist
-  mkdirSync(folderPath, { recursive: true });
+  // Create day folder under root
+  createFolderUnderRoot(year, dayFolderName);
 
-  writeFileSync(filePath, descriptionMarkdown);
+  // Save the description markdown file inside the day folder
+  const mdDayFileName = `${dayFormatted}.md`;
+  createFile(year, SavePath.DAY, mdDayFileName, descriptionMarkdown, dayFormatted);
+
+  // TODO: Save test file and main ts file.
 };

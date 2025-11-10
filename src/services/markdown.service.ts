@@ -1,4 +1,4 @@
-export { htmlToMarkdown };
+export { htmlToMarkdown, addDayHeader };
 
 const htmlToMarkdown = (html: string): string => {
   let markdown = html;
@@ -72,4 +72,8 @@ const htmlToMarkdown = (html: string): string => {
   markdown = markdown.trim();
 
   return markdown;
+};
+
+const addDayHeader = (markdown: string, dayNumber: number): string => {
+  return `# Day ${dayNumber}\n\n${markdown}`;
 };

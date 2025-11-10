@@ -1,0 +1,35 @@
+const fs = require('fs');
+const path = require('path');
+
+// Function to copy files recursively
+const copyRecursive = (srcDir, destDir, isDev = false) => {
+  if (!fs.existsSync(destDir)) {
+    fs.mkdirSync(destDir, { recursive: true });
+  }
+
+  fs.readdirSync(srcDir, { withFileTypes: true }).forEach((file) => {
+    const srcPath = path.join(srcDir, file.name);
+    const destPath = path.join(destDir, file.name);
+
+    if (file.isDirectory()) {
+      copyRecursive(srcPath, destPath, isDev);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  });
+};
+
+// Always copy templates
+const templatesSrcDir = path.join(__dirname, '../src/templates');
+const templatesDestDir = path.join(__dirname, '../dist/templates');
+copyRecursive(templatesSrcDir, templatesDestDir);
+console.log('✓ Templates files copied successfully');
+
+// Copy HTML files only in DEV mode
+const isDev = process.env.NODE_ENV === 'development' || process.argv.includes('--dev');
+if (isDev) {
+  const htmlSrcDir = path.join(__dirname, '../src/html');
+  const htmlDestDir = path.join(__dirname, '../dist/html');
+  copyRecursive(htmlSrcDir, htmlDestDir, true);
+  console.log('[DEV] ✓ HTML files copied successfully');
+}

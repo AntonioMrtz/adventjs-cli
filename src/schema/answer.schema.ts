@@ -6,12 +6,12 @@ interface TestsAnswer {
   tests: boolean;
 }
 
-interface VscodeAnswer {
-  vscode: boolean;
+interface ConfigFilesAnswer {
+  configFiles: boolean;
 }
 
 interface DependenciesAnswer {
   dependencies: boolean;
 }
 
-export { YearAnswer, TestsAnswer, VscodeAnswer, DependenciesAnswer };
+export { YearAnswer, TestsAnswer, ConfigFilesAnswer, DependenciesAnswer };

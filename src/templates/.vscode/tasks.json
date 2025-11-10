@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "tsc: build current file",
+      "type": "shell",
+      "command": "${workspaceFolder}/node_modules/.bin/tsc", // Run the TypeScript compiler
+      "args": [
+        "${file}", // Compile the currently opened file
+        "--outDir",
+        "${fileDirname}/dist", // Output compiled JS to the current file's directory under dist/
+        "--sourceMap" // Enable source maps for debugging
+      ],
+      "problemMatcher": ["$tsc"],
+      "group": "build",
+      "presentation": {
+        "reveal": "silent"
+      }
+    }
+  ]
+}

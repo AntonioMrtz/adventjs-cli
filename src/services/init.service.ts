@@ -1,10 +1,21 @@
 import { getChalkLogger } from './chalk.service';
 import inquirer from 'inquirer';
-import { DependenciesAnswer, TestsAnswer, VscodeAnswer, YearAnswer } from '../schema/answer.schema';
+import {
+  DependenciesAnswer,
+  TestsAnswer,
+  ConfigFilesAnswer,
+  YearAnswer,
+} from '../schema/answer.schema';
 import { exec } from 'child_process';
-import { writeFileSync } from 'fs';
 import { DEV_DEPENDENCIES } from '../schema/dependencies.schema';
-import { CONFIG_FILE } from '../schema/app.schema';
+import {
+  CONFIG_FILE,
+  copyFromTemplates,
+  copyFromTemplatesWithReplacement,
+  createFile,
+  createRootFolder,
+  SavePath,
+} from './file.service';
 
 export { handleInit };
 
@@ -25,37 +36,42 @@ const handleInit = async (): Promise<void> => {
   const { tests } = await inquirer.prompt<TestsAnswer>({
     type: 'confirm',
     name: 'tests',
-    message: 'Do you want to generate tests files? (Recommended)',
+    message: 'Do you want to use tests? (Recommended)',
     default: true,
   });
 
-  const { vscode } = await inquirer.prompt<VscodeAnswer>({
+  const { configFiles } = await inquirer.prompt<ConfigFilesAnswer>({
     type: 'confirm',
-    name: 'vscode',
-    message: 'Do you want to generate vscode config files?',
+    name: 'configFiles',
+    message:
+      'Do you want to generate config files for Prettier, VSCode, and other tools? (Recommended)',
     default: true,
   });
 
   const { dependencies } = await inquirer.prompt<DependenciesAnswer>({
     type: 'confirm',
     name: 'dependencies',
-    message: 'Do you want to install dependencies?',
+    message: 'Do you want to install dependencies? (Recommended)',
     default: true,
   });
 
-  const config = { year, tests, vscode, dependencies };
-  writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
+  createRootFolder(year);
 
-  console.log(chalk.green('✅ Configuration saved to adventjs-cli.json:'), config);
+  _generateConfig(year, tests, configFiles, dependencies);
 
-  _generateGitignore();
-  _generateEslintConfig();
-  _generatePrettierConfig();
+  if (configFiles) {
+    _generateGitignore(year);
+    _generateEslintConfig(year);
+    _generatePrettierConfig(year);
+    _generateVscodeConfig(year);
+    _generateReadme(year);
+    _generateTestsConfig(year);
+    _generateGithubConfig(year);
+
+    console.log(chalk.green('✅ Configuration files generated'));
+  }
 
   _installDependencies(dependencies);
-  _generateVscodeConfig(vscode);
-  _generateReadme();
-  _generateTestsConfig(tests);
 };
 
 const _installDependencies = (shouldInstall: boolean): void => {
@@ -80,22 +96,49 @@ const _installDependencies = (shouldInstall: boolean): void => {
   );
 };
 
-const _generateVscodeConfig = (shouldGenerate: boolean): void => {
-  if (!shouldGenerate) {
-    return;
-  }
+const _generateVscodeConfig = (year: string): void => {
+  copyFromTemplates(year, CONFIG_FILE.VSCODE);
 };
 
-const _generateReadme = (): void => {};
-
-const _generateTestsConfig = (shouldGenerate: boolean): void => {
-  if (!shouldGenerate) {
-    return;
-  }
+const _generateReadme = (year: string): void => {
+  copyFromTemplatesWithReplacement(year, CONFIG_FILE.README);
+  console.log(chalk.blue('Generating README.md file...'));
 };
 
-const _generateGitignore = (): void => {};
+const _generateTestsConfig = (year: string): void => {
+  copyFromTemplates(year, CONFIG_FILE.JEST);
+  console.log(chalk.blue('Generating tests configuration...'));
+};
 
-const _generateEslintConfig = (): void => {};
+const _generateGitignore = (year: string): void => {
+  copyFromTemplates(year, CONFIG_FILE.GITIGNORE);
+  console.log(chalk.blue('Generating .gitignore file...'));
+};
 
-const _generatePrettierConfig = (): void => {};
+const _generateEslintConfig = (year: string): void => {
+  copyFromTemplates(year, CONFIG_FILE.ESLINT);
+  console.log(chalk.blue('Generating ESLint configuration...'));
+};
+
+const _generatePrettierConfig = (year: string): void => {
+  copyFromTemplates(year, CONFIG_FILE.PRETTIER);
+  copyFromTemplates(year, CONFIG_FILE.PRETTIER_IGNORE);
+  console.log(chalk.blue('Generating Prettier configuration...'));
+};
+
+const _generateGithubConfig = (year: string): void => {
+  copyFromTemplates(year, CONFIG_FILE.GITHUB);
+  console.log(chalk.blue('Generating GitHub configuration...'));
+};
+
+const _generateConfig = (
+  year: string,
+  tests: boolean,
+  configFiles: boolean,
+  dependencies: boolean,
+): void => {
+  console.log(chalk.blue('Generating configuration file...'));
+  const config = { year, tests, vscode: configFiles, dependencies };
+  createFile(year, SavePath.ROOT, CONFIG_FILE.CONFIG, JSON.stringify(config, null, 2));
+  console.log(chalk.green('✅ Adventjs CLI Configuration file generated'));
+};

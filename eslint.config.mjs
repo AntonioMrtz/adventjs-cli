@@ -11,6 +11,7 @@ export default [
       '**/*.js',
       '*.config.js',
       'jest.config.js',
+      'src/templates/**',
     ],
   },
   js.configs.recommended,
@@ -23,6 +24,7 @@ export default [
         ecmaVersion: 'latest',
         sourceType: 'module',
         project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     rules: {

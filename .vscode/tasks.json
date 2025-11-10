@@ -29,7 +29,7 @@
       "command": "sh",
       "args": [
         "-c",
-        "${workspaceFolder}/node_modules/.bin/tsc && node ${workspaceFolder}/scripts/copy-html.js"
+        "${workspaceFolder}/node_modules/.bin/tsc && node ${workspaceFolder}/scripts/copy-files.js"
       ],
       "problemMatcher": ["$tsc"],
       "group": "build",
@@ -41,7 +41,7 @@
       "label": "copy:html",
       "type": "shell",
       "command": "node",
-      "args": ["${workspaceFolder}/scripts/copy-html.js"],
+      "args": ["${workspaceFolder}/scripts/copy-files.js"],
       "presentation": {
         "reveal": "silent"
       }
