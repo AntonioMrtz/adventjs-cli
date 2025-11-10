@@ -1,9 +1,10 @@
-import { mkdirSync, writeFileSync, readFileSync, cpSync, statSync } from 'fs';
+import { mkdirSync, writeFileSync, readFileSync, cpSync, statSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { formatDayNumber } from './parsing.service';
 
 export {
-  getRootName,
+  getRootFolderName,
+  findAdventjsFolderInCurrentLevel,
   SavePath,
   createFile,
   createFolderUnderRoot,
@@ -14,9 +15,23 @@ export {
   CONFIG_FILE,
 };
 
-const getRootName = (year: string | number): string => {
-  const rootFolder = `adventjs-${year}`;
+const ROOT_FOLDER_PREFIX = 'adventjs-';
+
+const getRootFolderName = (year: string | number): string => {
+  const rootFolder = `${ROOT_FOLDER_PREFIX}${year}`;
   return rootFolder;
+};
+
+const findAdventjsFolderInCurrentLevel = (): string | null => {
+  try {
+    const files = readdirSync(process.cwd(), { withFileTypes: true });
+    const adventjsFolder = files.find(
+      (file) => file.isDirectory() && file.name.startsWith(ROOT_FOLDER_PREFIX),
+    );
+    return adventjsFolder ? adventjsFolder.name : null;
+  } catch {
+    return null;
+  }
 };
 
 enum SavePath {
@@ -44,7 +59,7 @@ const createFile = (
   content: string,
   day?: string,
 ): void => {
-  const rootFolder = getRootName(year);
+  const rootFolder = getRootFolderName(year);
   const rootFolderPath = join(process.cwd(), rootFolder);
 
   // Create root folder if it doesn't exist
@@ -67,7 +82,7 @@ const createFile = (
 };
 
 const createFolderUnderRoot = (year: string | number, folderName: string): void => {
-  const rootFolder = getRootName(year);
+  const rootFolder = getRootFolderName(year);
   const rootFolderPath = join(process.cwd(), rootFolder);
 
   // Create root folder if it doesn't exist
@@ -79,7 +94,7 @@ const createFolderUnderRoot = (year: string | number, folderName: string): void 
 };
 
 const createRootFolder = (year: string | number): void => {
-  const rootFolder = getRootName(year);
+  const rootFolder = getRootFolderName(year);
   const rootFolderPath = join(process.cwd(), rootFolder);
 
   // Create root folder if it doesn't exist
@@ -91,7 +106,7 @@ const copyFromTemplates = (
   sourceFileName: CONFIG_FILE,
   destinationFileName?: string,
 ): void => {
-  const rootFolder = getRootName(year);
+  const rootFolder = getRootFolderName(year);
   const rootFolderPath = join(process.cwd(), rootFolder);
 
   // Get the templates directory path
@@ -123,7 +138,7 @@ const copyFromTemplatesWithYearReplacement = (
   sourceFileName: CONFIG_FILE,
   destinationFileName?: string,
 ): void => {
-  const rootFolder = getRootName(year);
+  const rootFolder = getRootFolderName(year);
   const rootFolderPath = join(process.cwd(), rootFolder);
 
   // Get the templates directory path

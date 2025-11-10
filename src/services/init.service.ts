@@ -12,10 +12,10 @@ import {
   CONFIG_FILE,
   copyFromTemplates,
   copyFromTemplatesWithReplacement,
-  createFile,
   createRootFolder,
-  SavePath,
 } from './file.service';
+import { isDev } from './dev.service';
+import { generateConfig } from './config.service';
 
 export { handleInit };
 
@@ -26,38 +26,50 @@ const handleInit = async (): Promise<void> => {
     chalk.bold.cyan('AdventJS CLI Generator – Spin up your AdventJS challenges in seconds! 🎄⚡'),
   );
 
-  const { year } = await inquirer.prompt<YearAnswer>({
-    type: 'list',
-    name: 'year',
-    message: 'Choose the year of the AdventJS challenges you want to set up:',
-    choices: ['2024'],
-  });
+  const dev = isDev();
+  let year = '2024';
+  let tests = true;
+  let configFiles = true;
+  let dependencies = true;
 
-  const { tests } = await inquirer.prompt<TestsAnswer>({
-    type: 'confirm',
-    name: 'tests',
-    message: 'Do you want to use tests? (Recommended)',
-    default: true,
-  });
+  if (!dev) {
+    const yearAnswer = await inquirer.prompt<YearAnswer>({
+      type: 'list',
+      name: 'year',
+      message: 'Choose the year of the AdventJS challenges you want to set up:',
+      choices: ['2024'],
+    });
+    year = yearAnswer.year;
 
-  const { configFiles } = await inquirer.prompt<ConfigFilesAnswer>({
-    type: 'confirm',
-    name: 'configFiles',
-    message:
-      'Do you want to generate config files for Prettier, VSCode, and other tools? (Recommended)',
-    default: true,
-  });
+    const testsAnswer = await inquirer.prompt<TestsAnswer>({
+      type: 'confirm',
+      name: 'tests',
+      message: 'Do you want to use tests? (Recommended)',
+      default: true,
+    });
+    tests = testsAnswer.tests;
 
-  const { dependencies } = await inquirer.prompt<DependenciesAnswer>({
-    type: 'confirm',
-    name: 'dependencies',
-    message: 'Do you want to install dependencies? (Recommended)',
-    default: true,
-  });
+    const configFilesAnswer = await inquirer.prompt<ConfigFilesAnswer>({
+      type: 'confirm',
+      name: 'configFiles',
+      message:
+        'Do you want to generate config files for Prettier, VSCode, and other tools? (Recommended)',
+      default: true,
+    });
+    configFiles = configFilesAnswer.configFiles;
+
+    const dependenciesAnswer = await inquirer.prompt<DependenciesAnswer>({
+      type: 'confirm',
+      name: 'dependencies',
+      message: 'Do you want to install dependencies? (Recommended)',
+      default: true,
+    });
+    dependencies = dependenciesAnswer.dependencies;
+  }
 
   createRootFolder(year);
 
-  _generateConfig(year, tests, configFiles, dependencies);
+  generateConfig(year, tests, configFiles, dependencies);
 
   if (configFiles) {
     _generateGitignore(year);
@@ -129,16 +141,4 @@ const _generatePrettierConfig = (year: string): void => {
 const _generateGithubConfig = (year: string): void => {
   copyFromTemplates(year, CONFIG_FILE.GITHUB);
   console.log(chalk.blue('Generating GitHub configuration...'));
-};
-
-const _generateConfig = (
-  year: string,
-  tests: boolean,
-  configFiles: boolean,
-  dependencies: boolean,
-): void => {
-  console.log(chalk.blue('Generating configuration file...'));
-  const config = { year, tests, vscode: configFiles, dependencies };
-  createFile(year, SavePath.ROOT, CONFIG_FILE.CONFIG, JSON.stringify(config, null, 2));
-  console.log(chalk.green('✅ Adventjs CLI Configuration file generated'));
 };
