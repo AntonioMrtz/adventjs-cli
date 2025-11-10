@@ -1,9 +1,9 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: ""
-labels: ""
-assignees: ""
+title: ''
+labels: ''
+assignees: ''
 ---
 
 ## Description
@@ -24,10 +24,10 @@ How to test the feature
 
 ---
 
-__🖐️ Learn [how to CONTRIBUTE](https://antoniomrtz.github.io/SpotifyElectron_Web/docs/CONTRIBUTING/), all help is welcomed :)__
+**🖐️ Learn [how to CONTRIBUTE](https://antoniomrtz.github.io/SpotifyElectron_Web/docs/CONTRIBUTING/), all help is welcomed :)**
 
-__📚 Check out the [project documentation](https://antoniomrtz.github.io/SpotifyElectron_Web/docs/) for more info__
+**📚 Check out the [project documentation](https://antoniomrtz.github.io/SpotifyElectron_Web/docs/) for more info**
 
-__⭐ Help this project grow by giving it a star if you like it!__
+**⭐ Help this project grow by giving it a star if you like it!**
 
-__😵 Trello links are used for traceability, do not ask to join the board before leaving a comment in the related issue__
+**😵 Trello links are used for traceability, do not ask to join the board before leaving a comment in the related issue**
