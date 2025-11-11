@@ -18,4 +18,15 @@ interface GenerateProjectAnswer {
   generateProject: boolean;
 }
 
-export { YearAnswer, TestsAnswer, ConfigFilesAnswer, DependenciesAnswer, GenerateProjectAnswer };
+interface GenerateGitProjectAnswer {
+  generateGitProject: boolean;
+}
+
+export {
+  YearAnswer,
+  TestsAnswer,
+  ConfigFilesAnswer,
+  DependenciesAnswer,
+  GenerateProjectAnswer,
+  GenerateGitProjectAnswer,
+};

@@ -6,6 +6,7 @@ import {
   ConfigFilesAnswer,
   YearAnswer,
   GenerateProjectAnswer,
+  GenerateGitProjectAnswer,
 } from '../schema/answer.schema';
 import { spawn } from 'child_process';
 import { DEV_DEPENDENCIES } from '../schema/dependencies.schema';
@@ -34,6 +35,7 @@ const handleInit = async (): Promise<void> => {
   let configFiles = true;
   let dependencies = true;
   let generateProject = true;
+  let generateGitProject = true;
 
   if (!dev) {
     const yearAnswer = await inquirer.prompt<YearAnswer>({
@@ -76,6 +78,14 @@ const handleInit = async (): Promise<void> => {
       default: true,
     });
     generateProject = generateProjectAnswer.generateProject;
+
+    const generateGitProjectAnswer = await inquirer.prompt<GenerateGitProjectAnswer>({
+      type: 'confirm',
+      name: 'generateGitProject',
+      message: 'Do you want to generate a git project?',
+      default: true,
+    });
+    generateGitProject = generateGitProjectAnswer.generateGitProject;
   }
 
   createRootFolder(year);
@@ -83,6 +93,7 @@ const handleInit = async (): Promise<void> => {
   generateConfig(year, tests, configFiles, dependencies);
 
   await _generateProject(generateProject, year);
+  await _generateGitProject(generateGitProject, year);
 
   _generateConfigFiles(configFiles, year);
 
@@ -146,6 +157,37 @@ const _generateProject = (shouldGenerate: boolean, year: string): Promise<void> 
   });
 };
 
+const _generateGitProject = (shouldGenerate: boolean, year: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (!shouldGenerate) {
+      resolve();
+      return;
+    }
+    console.log(chalk.blue('Generating git project...'));
+
+    const child = spawn('git', ['init'], {
+      cwd: getRootFolderName(year),
+      stdio: 'inherit',
+    });
+
+    child.on('close', (code: number) => {
+      if (code !== 0) {
+        console.error(
+          chalk.red(`❌ Error generating git project: process exited with code ${code}`),
+        );
+        reject(new Error(`git init failed with code ${code}`));
+        return;
+      }
+      console.log(chalk.green('✅ Git project generated successfully'));
+      resolve();
+    });
+
+    child.on('error', (error: Error) => {
+      console.error(chalk.red(`❌ Error generating git project: ${error.message}`));
+      reject(error);
+    });
+  });
+};
 const _generateConfigFiles = (shouldGenerate: boolean, year: string): void => {
   if (shouldGenerate) {
     _generateGitignore(year);
