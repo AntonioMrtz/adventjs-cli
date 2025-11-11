@@ -3,7 +3,7 @@ import { getChalkLogger } from './chalk.service';
 import { addDayHeader, htmlToMarkdown } from './markdown.service';
 import { createFile, createFolderUnderRoot, SavePath } from './file.service';
 import { formatDayNumber } from './parsing.service';
-import { FunctionData } from '../schema/scrapping.schema';
+import { FunctionData, Language } from '../schema/scrapping.schema';
 import { getChallengeDataFromJson } from './scrapping.service';
 
 export { handleGenerateDay };
@@ -11,7 +11,7 @@ export { handleGenerateDay };
 const CHALLENGE_URL_TEMPLATE = 'https://adventjs.dev/challenges';
 const chalk = getChalkLogger();
 
-const handleGenerateDay = async (day: string): Promise<void> => {
+const handleGenerateDay = async (day: string, language: Language): Promise<void> => {
   const config = await parseConfig();
   if (!config) {
     return;
@@ -28,7 +28,7 @@ const handleGenerateDay = async (day: string): Promise<void> => {
 
   console.log(chalk.cyan(`🌐 Fetching challenge from ${url}...`));
 
-  const challengeData = await getChallengeDataFromJson(url, dayNumber);
+  const challengeData = await getChallengeDataFromJson(url, dayNumber, language);
   if (!challengeData) {
     console.error(chalk.red(`❌ Could not fetch the challenge data for day ${dayNumber}.`));
     return;
@@ -37,7 +37,7 @@ const handleGenerateDay = async (day: string): Promise<void> => {
   const markdown = htmlToMarkdown(challengeData.description);
   const markdownWithHeader = addDayHeader(markdown, dayNumber);
 
-  _saveDayFiles(config.year, dayNumber, markdownWithHeader, challengeData.functionData);
+  _saveDayFiles(config.year, dayNumber, markdownWithHeader, challengeData.functionData, language);
 
   console.log(
     chalk.green(`✅ Challenge ${dayNumber} for year ${config.year} generated successfully.`),
@@ -49,6 +49,7 @@ const _saveDayFiles = (
   day: number,
   descriptionMarkdown: string,
   functionData: FunctionData,
+  language: Language = Language.TS,
 ): void => {
   console.log(chalk.blue(`Generating files for Day ${day}...`));
   const dayFormatted = formatDayNumber(String(day));
@@ -61,12 +62,15 @@ const _saveDayFiles = (
   const mdDayFileName = `${dayFormatted}.md`;
   createFile(year, SavePath.DAY, mdDayFileName, descriptionMarkdown, dayFormatted);
 
-  const tsDayFileName = `${dayFormatted}.ts`;
-  const exportHeader = `export { ${functionData.functionName} };\n\n`;
+  const tsDayFileName = Language.TS === language ? `${dayFormatted}.ts` : `${dayFormatted}.py`;
+  const exportHeader =
+    Language.TS === language ? `export { ${functionData.functionName} };\n\n` : '';
   const tsFileContent = `${exportHeader}${functionData.functionCode}\n`;
   createFile(year, SavePath.DAY, tsDayFileName, tsFileContent, dayFormatted);
 
-  const tsTestFileName = `${dayFormatted}.spec.ts`;
-  const testFileContent = `import { ${functionData.functionName} } from './${dayFormatted}';\n\ndescribe('Challenge Day ${day}', () => {\n  it('should ...', () => {\n    // TODO: Add test cases\n  });\n});\n`;
-  createFile(year, SavePath.DAY, tsTestFileName, testFileContent, dayFormatted);
+  if ([Language.TS].includes(language)) {
+    const tsTestFileName = `${dayFormatted}.spec.ts`;
+    const testFileContent = `import { ${functionData.functionName} } from './${dayFormatted}';\n\ndescribe('Challenge Day ${day}', () => {\n  it('should ...', () => {\n    // TODO: Add test cases\n  });\n});\n`;
+    createFile(year, SavePath.DAY, tsTestFileName, testFileContent, dayFormatted);
+  }
 };
