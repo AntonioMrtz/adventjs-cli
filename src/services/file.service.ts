@@ -41,6 +41,7 @@ enum SavePath {
 
 enum CONFIG_FILE {
   CONFIG = 'adventjs-cli.json',
+  GITIGNORE_TEMPLATE = '.gitignore.template',
   GITIGNORE = '.gitignore',
   VSCODE = '.vscode',
   PRETTIER = '.prettierrc',

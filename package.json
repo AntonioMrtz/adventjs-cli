@@ -1,6 +1,6 @@
 {
   "name": "adventjs-cli",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": " Spin up your AdventJS challenges by @midudev in seconds! 🎄⚡ ",
   "author": {
     "name": "Antonio Martinez Fernandez",
@@ -11,8 +11,11 @@
   "license": "Attribution-NonCommercial-ShareAlike 4.0 International",
   "main": "dist/index.js",
   "bin": {
-    "adventjs": "./dist/index.js"
+    "adventjs": "dist/index.js"
   },
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "start": "tsc && npm run copy:files && node dist/index.js",
     "dev": "DEV=true tsc && DEV=true npm run copy:files && DEV=true node dist/index.js",

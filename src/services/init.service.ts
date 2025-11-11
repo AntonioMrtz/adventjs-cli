@@ -217,7 +217,7 @@ const _generateTestsConfig = (year: string): void => {
 };
 
 const _generateGitignore = (year: string): void => {
-  copyFromTemplates(year, CONFIG_FILE.GITIGNORE);
+  copyFromTemplates(year, CONFIG_FILE.GITIGNORE_TEMPLATE, CONFIG_FILE.GITIGNORE);
   console.log(chalk.blue('Generating .gitignore file...'));
 };
 
