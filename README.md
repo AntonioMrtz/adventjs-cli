@@ -9,6 +9,38 @@ AdventJS CLI Generator – Spin up your AdventJS challenges in seconds! 🎄⚡
 
 Focus on solving the challenges, not setting them up! 🚀
 
+## How to use it
+
+### 1. Initialize your project
+
+Start by initializing your AdventJS project:
+
+```bash
+npx adventjs-cli init
+```
+
+This command will guide you through a step-by-step setup.
+
+The tool will create a new folder (`adventjs-YYYY`) with all necessary configuration files and a ready-to-use project structure.
+
+### 2. Generate boilerplate for a specific day
+
+Once your project is initialized, generate the starter files for any challenge day:
+
+```bash
+npx adventjs-cli g <day>
+```
+
+Replace `<day>` with the challenge day number (e.g., `1`, `5`, `25`).
+
+**Example:**
+
+```bash
+npx adventjs-cli g 1
+```
+
+---
+
 ## Run
 
 ```bash
