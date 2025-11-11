@@ -1,5 +1,5 @@
 import { getChalkLogger } from './chalk.service';
-import { launchBrowser, createPage } from './puppeteer.service';
+import { launchBrowser, createPage, getChallengeDataFromPage } from './puppeteer.service';
 import { FunctionData, ChallengeData } from '../schema/scrapping.schema';
 
 export { getChallengeDataFromJson };
@@ -15,19 +15,7 @@ const getChallengeDataFromJson = async (
     const page = await createPage(browser, url);
 
     // Extract JSON data that was already loaded with the page
-    const jsonData = await page.evaluate(() => {
-      // Look for Next.js data in __NEXT_DATA__
-      const nextDataScript = document.getElementById('__NEXT_DATA__');
-      if (nextDataScript && nextDataScript.textContent) {
-        try {
-          const data = JSON.parse(nextDataScript.textContent);
-          return data;
-        } catch {
-          return null;
-        }
-      }
-      return null;
-    });
+    const jsonData = await getChallengeDataFromPage(page);
 
     await browser.close();
 
