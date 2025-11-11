@@ -49,7 +49,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/dist/index.js",
       "preLaunchTask": "tsc: build index.ts (DEV)",
-      "args": ["g", "1","ts"],
+      "args": ["g", "1", "ts"],
       "env": {
         "DEV": "true"
       },
