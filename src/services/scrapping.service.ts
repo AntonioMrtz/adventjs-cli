@@ -1,6 +1,6 @@
 import { getChalkLogger } from './chalk.service';
 import { launchBrowser, createPage, getChallengeDataFromPage } from './puppeteer.service';
-import { FunctionData, ChallengeData } from '../schema/scrapping.schema';
+import { FunctionData, ChallengeData, Language } from '../schema/scrapping.schema';
 
 export { getChallengeDataFromJson };
 
@@ -9,6 +9,7 @@ const chalk = getChalkLogger();
 const getChallengeDataFromJson = async (
   url: string,
   day: number,
+  language: Language,
 ): Promise<ChallengeData | null> => {
   try {
     const browser = await launchBrowser();
@@ -27,16 +28,20 @@ const getChallengeDataFromJson = async (
     const pageProps = jsonData.props.pageProps;
     const description = pageProps.description;
     const typescriptCode = pageProps.defaultCode?.typescript;
+    const pythonCode = pageProps.defaultCode?.python;
 
-    if (!description || !typescriptCode) {
-      console.error(
-        chalk.red(`❌ Missing description or TypeScript code in page data for day ${day}.`),
-      );
+    if (!description || !typescriptCode || !pythonCode) {
+      console.error(chalk.red(`❌ Missing description or code in page data for day ${day}.`));
       return null;
     }
 
     // Parse function data from TypeScript code
-    const functionData = _parseFunctionData(typescriptCode);
+
+    const functionData =
+      language === Language.TS
+        ? _parseFunctionData(typescriptCode)
+        : _parsePythonFunctionData(pythonCode);
+
     if (!functionData) {
       console.error(chalk.red(`❌ Could not parse the function data for day ${day}.`));
       return null;
@@ -65,5 +70,48 @@ const _parseFunctionData = (codeText: string): FunctionData | null => {
   return {
     functionName,
     functionCode: codeText.trim(),
+  };
+};
+
+/**
+ * Parses Python function code and extracts the function name and code block.
+ * Returns null if no function is found.
+ */
+const _parsePythonFunctionData = (codeText: string): FunctionData | null => {
+  // Split by lines and trim
+  const lines = codeText.split('\n');
+  let functionName = '';
+  let functionStart = -1;
+  let indent = '';
+  // Find the first function definition
+  for (let i = 0; i < lines.length; i++) {
+    const match = lines[i].match(/^\s*def\s+(\w+)\s*\(/);
+    if (match) {
+      functionName = match[1];
+      functionStart = i;
+      indent = lines[i].match(/^\s*/)?.[0] || '';
+      break;
+    }
+  }
+  if (!functionName || functionStart === -1) return null;
+
+  // Extract the function block (assumes no nested functions)
+  const functionLines = [lines[functionStart]];
+  for (let i = functionStart + 1; i < lines.length; i++) {
+    // Stop if indentation is less or equal to the function definition
+    if (lines[i].trim() === '') {
+      functionLines.push(lines[i]);
+      continue;
+    }
+    const currentIndent = lines[i].match(/^\s*/)?.[0] || '';
+    if (currentIndent.length <= indent.length && !lines[i].startsWith(indent + ' ')) {
+      break;
+    }
+    functionLines.push(lines[i]);
+  }
+  const functionCode = functionLines.join('\n').trim();
+  return {
+    functionName,
+    functionCode,
   };
 };
