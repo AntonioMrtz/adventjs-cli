@@ -1,102 +1,69 @@
 import { getChalkLogger } from './chalk.service';
-import {
-  launchBrowser,
-  createPage,
-  waitForElement,
-  getElementContent,
-  getCodeBlockContent,
-  clickButtonByProperty,
-} from './puppeteer.service';
+import { launchBrowser, createPage } from './puppeteer.service';
 import { FunctionData, ChallengeData } from '../schema/scrapping.schema';
 
-export { getChallengeData };
+export { getChallengeDataFromJson };
 
-const ID_DESCRIPTION = 'challenge-description';
-const CLASS_FUNCTION_BLOCK = '.view-lines';
-const SUB_SELECTOR_FUNCTION_BLOCK = 'div.view-line';
 const chalk = getChalkLogger();
 
-const getChallengeData = async (url: string, day: number): Promise<ChallengeData | null> => {
+const getChallengeDataFromJson = async (
+  url: string,
+  day: number,
+): Promise<ChallengeData | null> => {
   try {
     const browser = await launchBrowser();
     const page = await createPage(browser, url);
 
-    const clickSuccess = await clickButtonByProperty(page, 'title', 'typescript', 'span');
-    if (!clickSuccess) {
-      console.warn(chalk.yellow('⚠️  Click on TypeScript button failed, continuing anyway...'));
-    }
-
-    // Wait longer for the content to change after clicking
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 3000 }).catch(() => {});
-
-    // Wait for function block to have specific content (not the placeholder)
-    await page
-      .waitForFunction(
-        () => {
-          const el = document.querySelector(CLASS_FUNCTION_BLOCK);
-          if (!el || !el.textContent) return false;
-          const content = el.textContent.trim();
-          // Check that we don't have the placeholder content
-          return content.length > 50 && !content.includes('Code here');
-        },
-        { timeout: 10000 },
-      )
-      .catch(() => {
-        console.warn(
-          chalk.yellow('⚠️  Function block content did not load properly, continuing anyway...'),
-        );
-      });
-
-    // Add final delay to ensure all DOM is rendered
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    await waitForElement(page, `#${ID_DESCRIPTION}`);
-    await waitForElement(page, CLASS_FUNCTION_BLOCK);
-
-    const challengeDescription = await getElementContent(page, `#${ID_DESCRIPTION}`);
-    const functionBlockHTML = await getCodeBlockContent(
-      page,
-      CLASS_FUNCTION_BLOCK,
-      SUB_SELECTOR_FUNCTION_BLOCK,
-    );
+    // Extract JSON data that was already loaded with the page
+    const jsonData = await page.evaluate(() => {
+      // Look for Next.js data in __NEXT_DATA__
+      const nextDataScript = document.getElementById('__NEXT_DATA__');
+      if (nextDataScript && nextDataScript.textContent) {
+        try {
+          const data = JSON.parse(nextDataScript.textContent);
+          return data;
+        } catch {
+          return null;
+        }
+      }
+      return null;
+    });
 
     await browser.close();
 
-    if (!challengeDescription) {
+    if (!jsonData || !jsonData.props || !jsonData.props.pageProps) {
+      console.error(chalk.red(`❌ Could not find JSON data in page for day ${day}.`));
+      return null;
+    }
+
+    const pageProps = jsonData.props.pageProps;
+    const description = pageProps.description;
+    const typescriptCode = pageProps.defaultCode?.typescript;
+
+    if (!description || !typescriptCode) {
       console.error(
-        chalk.red(
-          `❌ Could not find the challenge description for day ${day}. The structure of the page may have changed.`,
-        ),
+        chalk.red(`❌ Missing description or TypeScript code in page data for day ${day}.`),
       );
       return null;
     }
 
-    if (!functionBlockHTML) {
-      console.error(
-        chalk.red(
-          `❌ Could not find the challenge function for day ${day}. The structure of the page may have changed.`,
-        ),
-      );
-      return null;
-    }
-
-    // Parse function data
-    const functionData = _parseFunctionData(functionBlockHTML);
+    // Parse function data from TypeScript code
+    const functionData = _parseFunctionData(typescriptCode);
     if (!functionData) {
       console.error(chalk.red(`❌ Could not parse the function data for day ${day}.`));
       return null;
     }
 
+    chalk.green(`✓ Challenge data extracted from page JSON for day ${day}`);
+
     return {
-      description: challengeDescription,
+      description,
       functionData,
     };
   } catch (error) {
     console.error(
       chalk.red(
-        `❌ Error fetching challenge data for day ${day}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        `❌ Error fetching challenge data from JSON for day ${day}: ${error instanceof Error ? error.message : 'Unknown error'}`,
       ),
     );
     return null;
@@ -104,45 +71,43 @@ const getChallengeData = async (url: string, day: number): Promise<ChallengeData
 };
 
 const _parseFunctionData = (codeText: string): FunctionData | null => {
-  // Start with the single-line content
-  let cleaned = codeText.trim();
+  // First, split by \n to preserve line breaks from JSON
+  let lines = codeText
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
 
-  // Decode any remaining HTML entities
-  cleaned = cleaned.replace(/&nbsp;/g, ' ');
-  cleaned = cleaned.replace(/&lt;/g, '<');
-  cleaned = cleaned.replace(/&gt;/g, '>');
-  cleaned = cleaned.replace(/&amp;/g, '&');
-  cleaned = cleaned.replace(/&quot;/g, '"');
-  // eslint-disable-next-line quotes
-  cleaned = cleaned.replace(/&#39;/g, "'");
+  // Decode any HTML entities
+  lines = lines.map((line) => {
+    let decoded = line;
+    decoded = decoded.replace(/&nbsp;/g, ' ');
+    decoded = decoded.replace(/&lt;/g, '<');
+    decoded = decoded.replace(/&gt;/g, '>');
+    decoded = decoded.replace(/&amp;/g, '&');
+    decoded = decoded.replace(/&quot;/g, '"');
+    // eslint-disable-next-line quotes
+    decoded = decoded.replace(/&#39;/g, "'");
+    return decoded;
+  });
 
-  // Normalize multiple spaces
-  cleaned = cleaned.replace(/\s+/g, ' ').trim();
+  // Join back with newlines to preserve structure
+  let cleaned = lines.join('\n').trim();
 
-  // Format the code: add newlines after { and before } appropriately
-  // Replace " { " with " {\n  " to add newlines and indentation
-  cleaned = cleaned.replace(/\s*{\s*/g, ' {\n  ');
-  // Replace " } " with "\n}" to close blocks
-  cleaned = cleaned.replace(/\s*}\s*/g, '\n}');
-  // Replace comment markers with newlines
-  cleaned = cleaned.replace(/\s+(\/\/.*?)(\s+return|\s*}|$)/g, '\n  $1\n  $2');
-
-  // Clean up multiple newlines
-  cleaned = cleaned.replace(/\n\s*\n/g, '\n');
-
-  // Trim overall
-  cleaned = cleaned.trim();
-
-  // Find export statement if exists
+  // Find export statement if exists and remove it (export will be added separately)
   const exportMatch = cleaned.match(/export\s*{\s*(\w+)\s*}/);
   let functionName = '';
 
-  // Try to find function name from export first
   if (exportMatch && exportMatch[1]) {
     functionName = exportMatch[1];
-  } else {
-    // Otherwise find from function/const declaration
-    const functionNameMatch = cleaned.match(/(?:function|const)\s+(\w+)\s*(?:\(|=)/);
+    // Remove export from the code
+    cleaned = cleaned.replace(/export\s*{\s*(\w+)\s*}\s*;?\n?/g, '');
+  }
+
+  // If no export found, try to find function name from declaration
+  if (!functionName) {
+    const functionNameMatch = cleaned.match(
+      /(?:type\s+\w+.*?\n)?(?:function|const)\s+(\w+)\s*(?:\(|=)/,
+    );
     if (functionNameMatch && functionNameMatch[1]) {
       functionName = functionNameMatch[1];
     }
@@ -151,6 +116,12 @@ const _parseFunctionData = (codeText: string): FunctionData | null => {
   if (!functionName) {
     return null;
   }
+
+  // Clean up any remaining multiple blank lines
+  cleaned = cleaned.replace(/\n\s*\n\s*\n/g, '\n\n');
+
+  // Final trim
+  cleaned = cleaned.trim();
 
   return {
     functionName,
