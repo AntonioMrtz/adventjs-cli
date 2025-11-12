@@ -43,6 +43,7 @@ interface ChallengeDataStructure {
       description: string;
       defaultCode: {
         typescript: string;
+        python: string;
       };
       [key: string]: unknown;
     };

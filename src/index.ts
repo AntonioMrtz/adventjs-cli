@@ -15,7 +15,6 @@ const main = async (): Promise<void> => {
     console.log('🔧 DEV MODE ENABLED');
   }
   await initAllCommands();
-
   program.parse(process.argv);
 };
 

@@ -1,4 +1,4 @@
-export { FunctionData, ChallengeData };
+export { FunctionData, ChallengeData, Language };
 
 interface FunctionData {
   functionName: string;
@@ -8,4 +8,9 @@ interface FunctionData {
 interface ChallengeData {
   description: string;
   functionData: FunctionData;
+}
+
+enum Language {
+  TS = 'ts',
+  PY = 'py',
 }
