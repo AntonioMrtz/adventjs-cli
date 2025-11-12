@@ -35,19 +35,26 @@ const getChallengeDataFromJson = async (
       return null;
     }
 
-    // Parse function data from TypeScript code
-    let functionData: FunctionData | null;
-    switch (language) {
-      case Language.TS:
-        functionData = _parseFunctionData(typescriptCode);
-        break;
-      case Language.PY:
-        functionData = _parsePythonFunctionData(pythonCode);
-        break;
-      default:
-        console.error(chalk.red(`❌ Unsupported language '${language}' for day ${day}.`));
-        return null;
+    // Optimized parser selection by language
+    const parsers: Record<Language, (code: string) => FunctionData | null> = {
+      [Language.TS]: _parseFunctionData,
+      [Language.PY]: _parsePythonFunctionData,
+    };
+    const codeByLanguage: Record<Language, string | undefined> = {
+      [Language.TS]: typescriptCode,
+      [Language.PY]: pythonCode,
+    };
+    const parser = parsers[language];
+    const code = codeByLanguage[language];
+
+    if (!parser || !code) {
+      console.error(
+        chalk.red(`❌ Unsupported or missing code for language '${language}' for day ${day}.`),
+      );
+      return null;
     }
+
+    const functionData = parser(code);
 
     if (!functionData) {
       console.error(chalk.red(`❌ Could not parse the function data for day ${day}.`));
