@@ -36,11 +36,18 @@ const getChallengeDataFromJson = async (
     }
 
     // Parse function data from TypeScript code
-
-    const functionData =
-      language === Language.TS
-        ? _parseFunctionData(typescriptCode)
-        : _parsePythonFunctionData(pythonCode);
+    let functionData: FunctionData | null;
+    switch (language) {
+      case Language.TS:
+        functionData = _parseFunctionData(typescriptCode);
+        break;
+      case Language.PY:
+        functionData = _parsePythonFunctionData(pythonCode);
+        break;
+      default:
+        console.error(chalk.red(`❌ Unsupported language '${language}' for day ${day}.`));
+        return null;
+    }
 
     if (!functionData) {
       console.error(chalk.red(`❌ Could not parse the function data for day ${day}.`));
