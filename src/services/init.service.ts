@@ -251,7 +251,7 @@ const _generateGithubConfig = (year: string): void => {
 
 const _displayAsciiArt = (): void => {
   try {
-    const asciiPath = join(__dirname, '..', '..', 'assets', 'ascii.txt');
+    const asciiPath = join(__dirname, '..', 'assets', 'ascii.txt');
     const asciiContent = readFileSync(asciiPath, 'utf-8');
     console.log(chalk.cyan(asciiContent));
   } catch {
