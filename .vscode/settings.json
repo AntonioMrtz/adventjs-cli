@@ -16,5 +16,8 @@
   "jest.runMode": "on-demand",
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   }
 }
