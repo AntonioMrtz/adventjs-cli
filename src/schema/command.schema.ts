@@ -1,5 +1,6 @@
 import { handleGenerateDay } from '../services/generate-day.service';
 import { handleInit } from '../services/init.service';
+import { Language } from './scrapping.schema';
 
 export { ALL_COMMANDS };
 
@@ -17,9 +18,18 @@ const InitCommand: Command = {
 };
 
 const GenerateDayCommand: Command = {
-  command: 'g <day>',
+  command: 'g <day> <language>',
   description: 'Generate boilerplate for a specific day',
-  function: handleGenerateDay,
+  function: async (day: string, language: Language): Promise<void> => {
+    const validLanguages = Object.values(Language);
+    if (!validLanguages.includes(language)) {
+      console.error(
+        `❌ Invalid language '${language}'. Please choose one of the following: ${validLanguages.join(', ')}.`,
+      );
+      process.exit(1);
+    }
+    await handleGenerateDay(day, language);
+  },
 };
 
 const ALL_COMMANDS = [InitCommand, GenerateDayCommand];
