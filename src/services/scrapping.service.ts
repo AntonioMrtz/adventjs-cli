@@ -59,60 +59,11 @@ const getChallengeDataFromJson = async (
 };
 
 const _parseFunctionData = (codeText: string): FunctionData | null => {
-  // First, split by \n to preserve line breaks from JSON
-  let lines = codeText
-    .split('\n')
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
-
-  // Decode any HTML entities
-  lines = lines.map((line) => {
-    let decoded = line;
-    decoded = decoded.replace(/&nbsp;/g, ' ');
-    decoded = decoded.replace(/&lt;/g, '<');
-    decoded = decoded.replace(/&gt;/g, '>');
-    decoded = decoded.replace(/&amp;/g, '&');
-    decoded = decoded.replace(/&quot;/g, '"');
-    // eslint-disable-next-line quotes
-    decoded = decoded.replace(/&#39;/g, "'");
-    return decoded;
-  });
-
-  // Join back with newlines to preserve structure
-  let cleaned = lines.join('\n').trim();
-
-  // Find export statement if exists and remove it (export will be added separately)
-  const exportMatch = cleaned.match(/export\s*{\s*(\w+)\s*}/);
-  let functionName = '';
-
-  if (exportMatch && exportMatch[1]) {
-    functionName = exportMatch[1];
-    // Remove export from the code
-    cleaned = cleaned.replace(/export\s*{\s*(\w+)\s*}\s*;?\n?/g, '');
-  }
-
-  // If no export found, try to find function name from declaration
-  if (!functionName) {
-    const functionNameMatch = cleaned.match(
-      /(?:type\s+\w+.*?\n)?(?:function|const)\s+(\w+)\s*(?:\(|=)/,
-    );
-    if (functionNameMatch && functionNameMatch[1]) {
-      functionName = functionNameMatch[1];
-    }
-  }
-
-  if (!functionName) {
-    return null;
-  }
-
-  // Clean up any remaining multiple blank lines
-  cleaned = cleaned.replace(/\n\s*\n\s*\n/g, '\n\n');
-
-  // Final trim
-  cleaned = cleaned.trim();
-
+  const functionNameMatch = codeText.match(/function\s+(\w+)\s*\(/);
+  if (!functionNameMatch) return null;
+  const functionName = functionNameMatch[1];
   return {
     functionName,
-    functionCode: cleaned,
+    functionCode: codeText.trim(),
   };
 };
