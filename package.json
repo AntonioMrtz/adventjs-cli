@@ -22,6 +22,7 @@
   ],
   "scripts": {
     "start": "tsc && npm run copy:files && node dist/index.js",
+    "get:challenges": "./scripts/get-all-challenges.sh",
     "dev": "DEV=true tsc && DEV=true npm run copy:files && DEV=true node dist/index.js",
     "copy:files": "node scripts/copy-files.js",
     "build": "rm -rf dist/ && tsc && npm run copy:files",
@@ -29,7 +30,7 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand src/__tests__/**.spec.ts"
   },
   "dependencies": {
     "chalk": "^4.1.2",

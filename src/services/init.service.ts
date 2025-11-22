@@ -19,12 +19,16 @@ import {
 } from './file.service';
 import { isDev } from './dev.service';
 import { generateConfig } from './config.service';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export { handleInit };
 
 const chalk = getChalkLogger();
 
 const handleInit = async (): Promise<void> => {
+  _displayAsciiArt();
+
   console.log(
     chalk.bold.cyan('AdventJS CLI Generator – Spin up your AdventJS challenges in seconds! 🎄⚡'),
   );
@@ -243,4 +247,14 @@ const _generatePrettierConfig = (year: string): void => {
 const _generateGithubConfig = (year: string): void => {
   copyFromTemplates(year, CONFIG_FILE.GITHUB);
   console.log(chalk.blue('Generating GitHub configuration...'));
+};
+
+const _displayAsciiArt = (): void => {
+  try {
+    const asciiPath = join(__dirname, '..', '..', 'assets', 'ascii.txt');
+    const asciiContent = readFileSync(asciiPath, 'utf-8');
+    console.log(chalk.cyan(asciiContent));
+  } catch {
+    // Ignore errors related to ASCII art display
+  }
 };
