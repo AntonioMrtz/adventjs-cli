@@ -11,7 +11,7 @@
   "license": "Attribution-NonCommercial-ShareAlike 4.0 International",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AntonioMrtz/adventjs-cli.git"
+    "url": "https://github.com/AntonioMrtz/adventjs-cli.git"
   },
   "main": "dist/index.js",
   "bin": {
