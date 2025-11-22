@@ -19,8 +19,7 @@
     "**/templates/**",
     ".vscode",
     "jest.config.js",
-    "**/*.spec.ts",
-    "**/*.test.ts",
+    "**/adventjs**/*.spec.ts",
     "**/adventjs**/"
   ]
 }

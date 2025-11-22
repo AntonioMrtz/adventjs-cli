@@ -25,6 +25,12 @@ const templatesDestDir = path.join(__dirname, '../dist/templates');
 copyRecursive(templatesSrcDir, templatesDestDir);
 console.log('✓ Templates files copied successfully');
 
+// Always copy assets
+const assetsSrcDir = path.join(__dirname, '../src/assets');
+const assetsDestDir = path.join(__dirname, '../dist/assets');
+copyRecursive(assetsSrcDir, assetsDestDir);
+console.log('✓ Assets files copied successfully');
+
 // Copy Example files only in DEV mode
 const isDev = process.env.DEV === 'true' || process.argv.includes('--dev');
 if (isDev) {

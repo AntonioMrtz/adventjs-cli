@@ -1,3 +1,6 @@
+- [ ] I have run tests locally and all pass
+- [ ] I have updated `package.json` and `package-lock.json` version if this is a release
+
 ## Description
 
 <!-- Describe the proposed changes in this pull request concisely and clearly. -->

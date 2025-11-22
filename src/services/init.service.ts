@@ -19,12 +19,16 @@ import {
 } from './file.service';
 import { isDev } from './dev.service';
 import { generateConfig } from './config.service';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export { handleInit };
 
 const chalk = getChalkLogger();
 
 const handleInit = async (): Promise<void> => {
+  _displayAsciiArt();
+
   console.log(
     chalk.bold.cyan('AdventJS CLI Generator – Spin up your AdventJS challenges in seconds! 🎄⚡'),
   );
@@ -94,6 +98,8 @@ const handleInit = async (): Promise<void> => {
 
   await _generateProject(generateProject, year);
   await _generateGitProject(generateGitProject, year);
+
+  _generateTsConfig(year);
 
   _generateConfigFiles(configFiles, year);
 
@@ -202,8 +208,14 @@ const _generateConfigFiles = (shouldGenerate: boolean, year: string): void => {
   }
 };
 
+const _generateTsConfig = (year: string): void => {
+  copyFromTemplates(year, CONFIG_FILE.TSCONFIG);
+  console.log(chalk.blue('Generating tsconfig.json file...'));
+};
+
 const _generateVscodeConfig = (year: string): void => {
   copyFromTemplates(year, CONFIG_FILE.VSCODE);
+  console.log(chalk.blue('Generating VSCode configuration...'));
 };
 
 const _generateReadme = (year: string): void => {
@@ -217,7 +229,7 @@ const _generateTestsConfig = (year: string): void => {
 };
 
 const _generateGitignore = (year: string): void => {
-  copyFromTemplates(year, CONFIG_FILE.GITIGNORE);
+  copyFromTemplates(year, CONFIG_FILE.GITIGNORE_TEMPLATE, CONFIG_FILE.GITIGNORE);
   console.log(chalk.blue('Generating .gitignore file...'));
 };
 
@@ -235,4 +247,14 @@ const _generatePrettierConfig = (year: string): void => {
 const _generateGithubConfig = (year: string): void => {
   copyFromTemplates(year, CONFIG_FILE.GITHUB);
   console.log(chalk.blue('Generating GitHub configuration...'));
+};
+
+const _displayAsciiArt = (): void => {
+  try {
+    const asciiPath = join(__dirname, '..', 'assets', 'ascii.txt');
+    const asciiContent = readFileSync(asciiPath, 'utf-8');
+    console.log(chalk.cyan(asciiContent));
+  } catch {
+    // Ignore errors related to ASCII art display
+  }
 };

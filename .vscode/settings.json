@@ -5,6 +5,8 @@
   "editor.detectIndentation": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "eslint.validate": ["typescript", "javascript"],
+  "typescript.preferences.quoteStyle": "single",
+  "javascript.preferences.quoteStyle": "single",
   "files.exclude": {
     "dist": true,
     "node_modules": true
@@ -16,5 +18,11 @@
   "jest.runMode": "on-demand",
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   }
 }
