@@ -1,11 +1,12 @@
 /* eslint-disable quotes */
 import { getChallengeUrl } from '../api/challenge.api';
+import { Language } from '../schema/scrapping.schema';
 import { getChallengeDataFromJson } from '../services/scrapping.service';
 
 describe('Scrapping Service', () => {
   it('01 - TypeScript', async () => {
     const url = getChallengeUrl(1, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 1);
+    const challengeData = await getChallengeDataFromJson(url, 1, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -18,7 +19,7 @@ describe('Scrapping Service', () => {
 
   it('02 - TypeScript', async () => {
     const url = getChallengeUrl(2, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 2);
+    const challengeData = await getChallengeDataFromJson(url, 2, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -31,7 +32,7 @@ describe('Scrapping Service', () => {
 
   it('03 - TypeScript', async () => {
     const url = getChallengeUrl(3, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 3);
+    const challengeData = await getChallengeDataFromJson(url, 3, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -44,7 +45,7 @@ describe('Scrapping Service', () => {
 
   it('04 - TypeScript', async () => {
     const url = getChallengeUrl(4, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 4);
+    const challengeData = await getChallengeDataFromJson(url, 4, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -57,7 +58,7 @@ describe('Scrapping Service', () => {
 
   it('05 - TypeScript', async () => {
     const url = getChallengeUrl(5, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 5);
+    const challengeData = await getChallengeDataFromJson(url, 5, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -70,7 +71,7 @@ describe('Scrapping Service', () => {
 
   it('06 - TypeScript', async () => {
     const url = getChallengeUrl(6, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 6);
+    const challengeData = await getChallengeDataFromJson(url, 6, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -83,7 +84,7 @@ describe('Scrapping Service', () => {
 
   it('07 - TypeScript', async () => {
     const url = getChallengeUrl(7, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 7);
+    const challengeData = await getChallengeDataFromJson(url, 7, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -96,7 +97,7 @@ describe('Scrapping Service', () => {
 
   it('08 - TypeScript', async () => {
     const url = getChallengeUrl(8, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 8);
+    const challengeData = await getChallengeDataFromJson(url, 8, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -109,7 +110,7 @@ describe('Scrapping Service', () => {
 
   it('09 - TypeScript', async () => {
     const url = getChallengeUrl(9, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 9);
+    const challengeData = await getChallengeDataFromJson(url, 9, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -138,7 +139,7 @@ describe('Scrapping Service', () => {
 
   it('10 - TypeScript', async () => {
     const url = getChallengeUrl(10, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 10);
+    const challengeData = await getChallengeDataFromJson(url, 10, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -151,7 +152,7 @@ describe('Scrapping Service', () => {
 
   it('11 - TypeScript', async () => {
     const url = getChallengeUrl(11, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 11);
+    const challengeData = await getChallengeDataFromJson(url, 11, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -164,7 +165,7 @@ describe('Scrapping Service', () => {
 
   it('12 - TypeScript', async () => {
     const url = getChallengeUrl(12, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 12);
+    const challengeData = await getChallengeDataFromJson(url, 12, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -177,7 +178,7 @@ describe('Scrapping Service', () => {
 
   it('13 - TypeScript', async () => {
     const url = getChallengeUrl(13, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 13);
+    const challengeData = await getChallengeDataFromJson(url, 13, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -190,7 +191,7 @@ describe('Scrapping Service', () => {
 
   it('14 - TypeScript', async () => {
     const url = getChallengeUrl(14, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 14);
+    const challengeData = await getChallengeDataFromJson(url, 14, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -203,7 +204,7 @@ describe('Scrapping Service', () => {
 
   it('15 - TypeScript', async () => {
     const url = getChallengeUrl(15, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 15);
+    const challengeData = await getChallengeDataFromJson(url, 15, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -216,7 +217,7 @@ describe('Scrapping Service', () => {
 
   it('16 - TypeScript', async () => {
     const url = getChallengeUrl(16, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 16);
+    const challengeData = await getChallengeDataFromJson(url, 16, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -229,7 +230,7 @@ describe('Scrapping Service', () => {
 
   it('17 - TypeScript', async () => {
     const url = getChallengeUrl(17, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 17);
+    const challengeData = await getChallengeDataFromJson(url, 17, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -242,7 +243,7 @@ describe('Scrapping Service', () => {
 
   it('18 - TypeScript', async () => {
     const url = getChallengeUrl(18, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 18);
+    const challengeData = await getChallengeDataFromJson(url, 18, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -255,7 +256,7 @@ describe('Scrapping Service', () => {
 
   it('19 - TypeScript', async () => {
     const url = getChallengeUrl(19, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 19);
+    const challengeData = await getChallengeDataFromJson(url, 19, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -270,7 +271,7 @@ describe('Scrapping Service', () => {
 
   it('20 - TypeScript', async () => {
     const url = getChallengeUrl(20, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 20);
+    const challengeData = await getChallengeDataFromJson(url, 20, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -283,7 +284,7 @@ describe('Scrapping Service', () => {
 
   it('21 - TypeScript', async () => {
     const url = getChallengeUrl(21, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 21);
+    const challengeData = await getChallengeDataFromJson(url, 21, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -296,7 +297,7 @@ describe('Scrapping Service', () => {
 
   it('22 - TypeScript', async () => {
     const url = getChallengeUrl(22, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 22);
+    const challengeData = await getChallengeDataFromJson(url, 22, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -309,7 +310,7 @@ describe('Scrapping Service', () => {
 
   it('23 - TypeScript', async () => {
     const url = getChallengeUrl(23, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 23);
+    const challengeData = await getChallengeDataFromJson(url, 23, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -322,7 +323,7 @@ describe('Scrapping Service', () => {
 
   it('24 - TypeScript', async () => {
     const url = getChallengeUrl(24, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 24);
+    const challengeData = await getChallengeDataFromJson(url, 24, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();
@@ -335,7 +336,7 @@ describe('Scrapping Service', () => {
 
   it('25 - TypeScript', async () => {
     const url = getChallengeUrl(25, 2024);
-    const challengeData = await getChallengeDataFromJson(url, 25);
+    const challengeData = await getChallengeDataFromJson(url, 25, Language.TS);
     const functionData = challengeData?.functionData;
     const description = challengeData?.description;
     expect(description).toBeDefined();

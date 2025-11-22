@@ -37,14 +37,7 @@ const handleGenerateDay = async (day: string, language: Language): Promise<void>
   const markdown = htmlToMarkdown(challengeData.description);
   const markdownWithHeader = addDayHeader(markdown, dayNumber);
 
-  _saveDayFiles(
-    config.year,
-    dayNumber,
-    markdownWithHeader,
-    challengeData.functionData,
-    config.tests,
-    language
-  );
+  _saveDayFiles(config.year, dayNumber, markdownWithHeader, challengeData.functionData, language);
 
   console.log(
     chalk.green(`✅ Challenge ${dayNumber} for year ${config.year} generated successfully.`),
@@ -56,6 +49,7 @@ const _saveDayFiles = (
   day: number,
   descriptionMarkdown: string,
   functionData: FunctionData,
+  language: Language,
 ): void => {
   console.log(chalk.blue(`Generating files for Day ${day}...`));
   const dayFormatted = formatDayNumber(String(day));
