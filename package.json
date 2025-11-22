@@ -30,7 +30,7 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand src/__tests__/**.spec.ts"
   },
   "dependencies": {
     "chalk": "^4.1.2",

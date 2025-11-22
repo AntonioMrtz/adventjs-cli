@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import puppeteer from 'puppeteer';
 
-export { fetchChallenge, fetchChallengeDev };
+export { fetchChallenge, fetchChallengeDev, getChallengeUrl };
 
 const CHALLENGE_URL_TEMPLATE = 'https://adventjs.dev/challenges';
 
@@ -14,7 +14,7 @@ const TEST_HTML_FILE = '2024-4-full.html';
 const chalk = getChalkLogger();
 
 const fetchChallenge = async (day: number, year): Promise<Response | null> => {
-  const url = `${CHALLENGE_URL_TEMPLATE}/${year}/${day}`;
+  const url = getChallengeUrl(day, year);
 
   try {
     console.log(chalk.cyan(`🌐 Fetching challenge from ${url}...`));
@@ -70,4 +70,8 @@ const fetchChallengeDev = async (): Promise<Response | null> => {
     console.error(chalk.red(`❌ Could not find local HTML file. Expected: ${htmlFileName}`));
     return null;
   }
+};
+
+const getChallengeUrl = (day: number, year: number): string => {
+  return `${CHALLENGE_URL_TEMPLATE}/${year}/${day}`;
 };
