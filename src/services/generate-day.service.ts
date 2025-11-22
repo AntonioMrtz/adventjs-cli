@@ -37,7 +37,13 @@ const handleGenerateDay = async (day: string): Promise<void> => {
   const markdown = htmlToMarkdown(challengeData.description);
   const markdownWithHeader = addDayHeader(markdown, dayNumber);
 
-  _saveDayFiles(config.year, dayNumber, markdownWithHeader, challengeData.functionData);
+  _saveDayFiles(
+    config.year,
+    dayNumber,
+    markdownWithHeader,
+    challengeData.functionData,
+    config.tests,
+  );
 
   console.log(
     chalk.green(`✅ Challenge ${dayNumber} for year ${config.year} generated successfully.`),
@@ -49,6 +55,7 @@ const _saveDayFiles = (
   day: number,
   descriptionMarkdown: string,
   functionData: FunctionData,
+  generateTests: boolean,
 ): void => {
   console.log(chalk.blue(`Generating files for Day ${day}...`));
   const dayFormatted = formatDayNumber(String(day));
@@ -66,7 +73,18 @@ const _saveDayFiles = (
   const tsFileContent = `${exportHeader}${functionData.functionCode}\n`;
   createFile(year, SavePath.DAY, tsDayFileName, tsFileContent, dayFormatted);
 
-  const tsTestFileName = `${dayFormatted}.spec.ts`;
-  const testFileContent = `import { ${functionData.functionName} } from './${dayFormatted}';\n\ndescribe('Challenge Day ${day}', () => {\n  it('should ...', () => {\n    // TODO: Add test cases\n  });\n});\n`;
-  createFile(year, SavePath.DAY, tsTestFileName, testFileContent, dayFormatted);
+  if (generateTests) {
+    _generateTests(year, day, dayFormatted, functionData);
+  }
+};
+
+const _generateTests = (
+  year: string,
+  day: number,
+  formattedDay: string,
+  functionData: FunctionData,
+): void => {
+  const tsTestFileName = `${formattedDay}.spec.ts`;
+  const testFileContent = `import { ${functionData.functionName} } from './${formattedDay}';\n\ndescribe('Challenge Day ${day}', () => {\n  it('should ...', () => {\n    // TODO: Add test cases\n  });\n});\n`;
+  createFile(year, SavePath.DAY, tsTestFileName, testFileContent, formattedDay);
 };
