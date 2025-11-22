@@ -5,6 +5,8 @@
   "editor.detectIndentation": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "eslint.validate": ["typescript", "javascript"],
+  "typescript.preferences.quoteStyle": "single",
+  "javascript.preferences.quoteStyle": "single",
   "files.exclude": {
     "dist": true,
     "node_modules": true
