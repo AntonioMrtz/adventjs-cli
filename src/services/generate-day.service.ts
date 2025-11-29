@@ -1,7 +1,7 @@
 import { parseConfig } from './config.service';
 import { getChalkLogger } from './chalk.service';
 import { addDayHeader, htmlToMarkdown } from './markdown.service';
-import { createFile, createFolderUnderRoot, SavePath } from './file.service';
+import { createFile, createFolder, SavePath } from './file.service';
 import { formatDayNumber } from './parsing.service';
 import { FunctionData } from '../schema/scrapping.schema';
 import { getChallengeDataFromJson } from './scrapping.service';
@@ -43,6 +43,7 @@ const handleGenerateDay = async (day: string): Promise<void> => {
     markdownWithHeader,
     challengeData.functionData,
     config.tests,
+    config.runningFromRoot,
   );
 
   console.log(
@@ -56,26 +57,43 @@ const _saveDayFiles = (
   descriptionMarkdown: string,
   functionData: FunctionData,
   generateTests: boolean,
+  runningFromRoot: boolean,
 ): void => {
   console.log(chalk.blue(`Generating files for Day ${day}...`));
   const dayFormatted = formatDayNumber(String(day));
   const dayFolderName = dayFormatted;
 
-  // Create day folder under root
-  createFolderUnderRoot(year, dayFolderName);
+  // Create day folder if it doesn't exist
+  createFolder(year, dayFolderName, runningFromRoot);
 
-  // Save the description markdown file inside the day folder
-  const mdDayFileName = `${dayFormatted}.md`;
-  createFile(year, SavePath.DAY, mdDayFileName, descriptionMarkdown, dayFormatted);
-
-  const tsDayFileName = `${dayFormatted}.ts`;
-  const exportHeader = `export { ${functionData.functionName} };\n\n`;
-  const tsFileContent = `${exportHeader}${functionData.functionCode}\n`;
-  createFile(year, SavePath.DAY, tsDayFileName, tsFileContent, dayFormatted);
+  _generateMarkdownFile(year, dayFormatted, descriptionMarkdown, runningFromRoot);
+  _generateTypeScriptFile(year, dayFormatted, functionData, runningFromRoot);
 
   if (generateTests) {
-    _generateTests(year, day, dayFormatted, functionData);
+    _generateTests(year, day, dayFormatted, functionData, runningFromRoot);
   }
+};
+
+const _generateMarkdownFile = (
+  year: string,
+  formattedDay: string,
+  descriptionMarkdown: string,
+  runningFromRoot: boolean,
+): void => {
+  const mdDayFileName = `${formattedDay}.md`;
+  createFile(year, SavePath.DAY, mdDayFileName, descriptionMarkdown, runningFromRoot, formattedDay);
+};
+
+const _generateTypeScriptFile = (
+  year: string,
+  formattedDay: string,
+  functionData: FunctionData,
+  runningFromRoot: boolean,
+): void => {
+  const tsDayFileName = `${formattedDay}.ts`;
+  const exportHeader = `export { ${functionData.functionName} };\n\n`;
+  const tsFileContent = `${exportHeader}${functionData.functionCode}\n`;
+  createFile(year, SavePath.DAY, tsDayFileName, tsFileContent, runningFromRoot, formattedDay);
 };
 
 const _generateTests = (
@@ -83,8 +101,9 @@ const _generateTests = (
   day: number,
   formattedDay: string,
   functionData: FunctionData,
+  runningFromRoot: boolean,
 ): void => {
   const tsTestFileName = `${formattedDay}.spec.ts`;
   const testFileContent = `import { ${functionData.functionName} } from './${formattedDay}';\n\ndescribe('Challenge Day ${day}', () => {\n  it('should ...', () => {\n    // TODO: Add test cases\n  });\n});\n`;
-  createFile(year, SavePath.DAY, tsTestFileName, testFileContent, formattedDay);
+  createFile(year, SavePath.DAY, tsTestFileName, testFileContent, runningFromRoot, formattedDay);
 };
