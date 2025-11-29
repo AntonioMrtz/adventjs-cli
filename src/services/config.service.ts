@@ -22,20 +22,24 @@ const parseConfig = async (): Promise<ConfigSchema | null> => {
     const isRootFolderPresent = findAdventjsFolderInCurrentLevel();
     const isConfigPresentCurrentDir = isConfigFileInCurrentDirectory();
 
+    if (isConfigPresentCurrentDir) {
+      const data = await readConfigAsync(CONFIG_FILE.CONFIG, 'utf8');
+      parsedJson = JSON.parse(data);
+      if (!parsedJson) {
+        throw new Error('Configuration file is empty or malformed');
+      }
+      parsedJson.runningFromRoot = false;
+      return parsedJson;
+    }
+
     if (isRootFolderPresent) {
       const path = `${isRootFolderPresent}/${CONFIG_FILE.CONFIG}`;
       const data = await readConfigAsync(path, 'utf8');
       parsedJson = JSON.parse(data);
-    }
-
-    if (isConfigPresentCurrentDir) {
-      const data = await readConfigAsync(CONFIG_FILE.CONFIG, 'utf8');
-      parsedJson = JSON.parse(data);
-    }
-
-    if (parsedJson && (isRootFolderPresent || isConfigPresentCurrentDir)) {
-      // Config present in current directory takes precedence over root folder config
-      parsedJson.runningFromRoot = !isConfigPresentCurrentDir && Boolean(isRootFolderPresent);
+      if (!parsedJson) {
+        throw new Error('Configuration file is empty or malformed');
+      }
+      parsedJson.runningFromRoot = true;
       return parsedJson;
     }
 
@@ -45,8 +49,12 @@ const parseConfig = async (): Promise<ConfigSchema | null> => {
       ),
     );
     return null;
-  } catch {
-    console.error(chalk.red(`❌ Error getting config from ${CONFIG_FILE.CONFIG}.`));
+  } catch (error) {
+    console.error(
+      chalk.red(
+        `❌ Error getting config from ${CONFIG_FILE.CONFIG}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      ),
+    );
     return null;
   }
 };
