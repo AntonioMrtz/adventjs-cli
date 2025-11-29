@@ -34,7 +34,7 @@ const parseConfig = async (): Promise<ConfigSchema | null> => {
     }
 
     if (parsedJson && (isRootFolderPresent || isConfigPresentCurrentDir)) {
-      // Config present inside root folder takes precedence
+      // Config present in current directory takes precedence over root folder config
       parsedJson.runningFromRoot = !isConfigPresentCurrentDir && Boolean(isRootFolderPresent);
       return parsedJson;
     }
