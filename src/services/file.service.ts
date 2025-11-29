@@ -7,12 +7,13 @@ export {
   findAdventjsFolderInCurrentLevel,
   SavePath,
   createFile,
-  createFolderUnderRoot,
+  createFolder,
   createRootFolder,
   copyFromTemplates,
-  _replaceYearPlaceholder as replaceYearPlaceholder,
-  copyFromTemplatesWithYearReplacement as copyFromTemplatesWithReplacement,
+  _replaceYearPlaceholder,
+  copyFromTemplatesWithYearReplacement,
   CONFIG_FILE,
+  isConfigFileInCurrentDirectory,
 };
 
 const ROOT_FOLDER_PREFIX = 'adventjs-';
@@ -32,6 +33,11 @@ const findAdventjsFolderInCurrentLevel = (): string | null => {
   } catch {
     return null;
   }
+};
+
+const isConfigFileInCurrentDirectory = (): boolean => {
+  const files = readdirSync(process.cwd());
+  return files.includes(CONFIG_FILE.CONFIG);
 };
 
 enum SavePath {
@@ -59,10 +65,19 @@ const createFile = (
   savePath: SavePath,
   fileName: string,
   content: string,
+  runningFromRoot: boolean,
   day?: string,
 ): void => {
-  const rootFolder = getRootFolderName(year);
-  const rootFolderPath = join(process.cwd(), rootFolder);
+  let rootFolder: string;
+  let rootFolderPath: string;
+
+  if (runningFromRoot) {
+    rootFolder = getRootFolderName(year);
+    rootFolderPath = join(process.cwd(), rootFolder);
+  } else {
+    rootFolder = '.';
+    rootFolderPath = process.cwd();
+  }
 
   // Create root folder if it doesn't exist
   mkdirSync(rootFolderPath, { recursive: true });
@@ -83,9 +98,21 @@ const createFile = (
   }
 };
 
-const createFolderUnderRoot = (year: string | number, folderName: string): void => {
-  const rootFolder = getRootFolderName(year);
-  const rootFolderPath = join(process.cwd(), rootFolder);
+const createFolder = (
+  year: string | number,
+  folderName: string,
+  runningFromRoot: boolean,
+): void => {
+  let rootFolder: string;
+  let rootFolderPath: string;
+
+  if (runningFromRoot) {
+    rootFolder = getRootFolderName(year);
+    rootFolderPath = join(process.cwd(), rootFolder);
+  } else {
+    rootFolder = '.';
+    rootFolderPath = process.cwd();
+  }
 
   // Create root folder if it doesn't exist
   mkdirSync(rootFolderPath, { recursive: true });

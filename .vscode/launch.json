@@ -35,7 +35,7 @@
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     },
     {
-      "name": "Debug: g <day> DEV",
+      "name": "Debug: g <day> DEV from outside adventjs-* generated folder",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/dist/index.js",
@@ -45,6 +45,19 @@
         "DEV": "true"
       },
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+    },
+    {
+      "name": "Debug: g <day> DEV from inside adventjs-* generated folder",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/dist/index.js",
+      "preLaunchTask": "tsc: build index.ts (DEV)",
+      "args": ["g", "1"],
+      "env": {
+        "DEV": "true"
+      },
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "cwd": "${workspaceFolder}/adventjs-2024"
     }
   ]
 }
