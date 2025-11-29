@@ -1,3 +1,4 @@
+const _coreDependencies = ['adventjs-cli'];
 const _testsDevDependencies = ['@types/jest', 'jest', 'ts-jest'];
 const _prettierDevDependencies = ['prettier'];
 const _eslintDevDependencies = [
@@ -10,6 +11,7 @@ const _eslintDevDependencies = [
 const _typescriptDevDependencies = ['typescript', 'ts-node'];
 
 const DEV_DEPENDENCIES = [
+  ..._coreDependencies,
   ..._testsDevDependencies,
   ..._prettierDevDependencies,
   ..._eslintDevDependencies,

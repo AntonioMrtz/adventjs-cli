@@ -13,7 +13,7 @@ import { DEV_DEPENDENCIES } from '../schema/dependencies.schema';
 import {
   CONFIG_FILE,
   copyFromTemplates,
-  copyFromTemplatesWithReplacement,
+  copyFromTemplatesWithYearReplacement,
   createRootFolder,
   getRootFolderName,
 } from './file.service';
@@ -149,7 +149,7 @@ const _generateProject = (shouldGenerate: boolean, year: string): Promise<void> 
     }
     console.log(chalk.blue('Generating AdventJS project...'));
     try {
-      copyFromTemplatesWithReplacement(year, CONFIG_FILE.PACKAGE_JSON);
+      copyFromTemplatesWithYearReplacement(year, CONFIG_FILE.PACKAGE_JSON);
       console.log(chalk.green('✅ AdventJS project generated successfully'));
       resolve();
     } catch (error) {
@@ -219,7 +219,7 @@ const _generateVscodeConfig = (year: string): void => {
 };
 
 const _generateReadme = (year: string): void => {
-  copyFromTemplatesWithReplacement(year, CONFIG_FILE.README);
+  copyFromTemplatesWithYearReplacement(year, CONFIG_FILE.README);
   console.log(chalk.blue('Generating README.md file...'));
 };
 
