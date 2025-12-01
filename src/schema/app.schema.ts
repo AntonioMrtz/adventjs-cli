@@ -6,7 +6,7 @@ const APP_DESCRIPTION = `AdventJS CLI Generator – Spin up your AdventJS challe
 📝 Generates TypeScript starter files + tests
 📖 Adds challenge description in Markdown format
 ⚙️ Handles project init, dependencies, and config automatically
-📅 Ready for 2024, 2025, and beyond
+📅 Ready for 2024 challenges!
 
 Focus on solving the challenges, not setting them up! 🚀`;
 

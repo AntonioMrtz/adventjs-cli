@@ -4,11 +4,10 @@ import { addDayHeader, htmlToMarkdown } from './markdown.service';
 import { createFile, createFolder, SavePath } from './file.service';
 import { formatDayNumber } from './parsing.service';
 import { FunctionData } from '../schema/scrapping.schema';
-import { getChallengeDataFromJson } from './scrapping.service';
+import { getChallengeDataFromJson, getChallengeUrl } from './scrapping.service';
 
 export { handleGenerateDay };
 
-const CHALLENGE_URL_TEMPLATE = 'https://adventjs.dev/challenges';
 const chalk = getChalkLogger();
 
 const handleGenerateDay = async (day: string): Promise<void> => {
@@ -18,15 +17,15 @@ const handleGenerateDay = async (day: string): Promise<void> => {
   }
 
   const dayNumber = parseInt(day, 10);
+  const yearNumber = parseInt(config.year, 10);
+
   // NOTE: we may need to adjust this range for future years. Some challenges have more than 25 days. Example: 2024 has 26 challenges.
   if (isNaN(dayNumber) || dayNumber < 1 || dayNumber > 25) {
     console.error(chalk.red('❌ Please provide a valid day number between 1 and 25.'));
     return;
   }
 
-  const url = `${CHALLENGE_URL_TEMPLATE}/${config.year}/${dayNumber}`;
-
-  console.log(chalk.cyan(`🌐 Fetching challenge from ${url}...`));
+  const url = getChallengeUrl(dayNumber, yearNumber);
 
   const challengeData = await getChallengeDataFromJson(url, dayNumber);
   if (!challengeData) {

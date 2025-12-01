@@ -2,7 +2,7 @@ import { getChalkLogger } from './chalk.service';
 import { launchBrowser, createPage, getChallengeDataFromPage } from './puppeteer.service';
 import { FunctionData, ChallengeData } from '../schema/scrapping.schema';
 
-export { getChallengeDataFromJson };
+export { getChallengeDataFromJson, getChallengeUrl };
 
 const chalk = getChalkLogger();
 
@@ -11,6 +11,8 @@ const getChallengeDataFromJson = async (
   day: number,
 ): Promise<ChallengeData | null> => {
   try {
+    console.log(chalk.cyan(`🌐 Fetching challenge from ${url}...`));
+
     const browser = await launchBrowser();
     const page = await createPage(browser, url);
 
@@ -66,4 +68,8 @@ const _parseFunctionData = (codeText: string): FunctionData | null => {
     functionName,
     functionCode: codeText.trim(),
   };
+};
+
+const getChallengeUrl = (day: number, year: number): string => {
+  return `https://${year}.adventjs.dev/challenges/${year}/${day}`;
 };
