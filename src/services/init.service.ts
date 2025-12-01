@@ -48,6 +48,7 @@ const handleInit = async (): Promise<void> => {
       name: 'year',
       message: 'Choose the year of the AdventJS challenges you want to set up:',
       choices: SUPPORTED_YEARS,
+      default: CURRENT_YEAR,
     });
     year = yearAnswer.year;
 
