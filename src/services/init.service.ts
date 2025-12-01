@@ -21,6 +21,7 @@ import { isDev } from './dev.service';
 import { generateConfig } from './config.service';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { CURRENT_YEAR, SUPPORTED_YEARS } from '../schema/app.schema';
 
 export { handleInit };
 
@@ -34,7 +35,7 @@ const handleInit = async (): Promise<void> => {
   );
 
   const dev = isDev();
-  let year = '2024'; // Default year
+  let year = CURRENT_YEAR; // Default year
   let tests = true;
   let configFiles = true;
   let dependencies = true;
@@ -46,7 +47,7 @@ const handleInit = async (): Promise<void> => {
       type: 'list',
       name: 'year',
       message: 'Choose the year of the AdventJS challenges you want to set up:',
-      choices: ['2024'],
+      choices: SUPPORTED_YEARS,
     });
     year = yearAnswer.year;
 
