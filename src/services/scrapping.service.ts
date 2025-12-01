@@ -1,6 +1,7 @@
 import { getChalkLogger } from './chalk.service';
 import { launchBrowser, createPage, getChallengeDataFromPage } from './puppeteer.service';
 import { FunctionData, ChallengeData } from '../schema/scrapping.schema';
+import { CURRENT_YEAR } from '../schema/app.schema';
 
 export { getChallengeDataFromJson, getChallengeUrl };
 
@@ -71,5 +72,9 @@ const _parseFunctionData = (codeText: string): FunctionData | null => {
 };
 
 const getChallengeUrl = (day: number, year: number): string => {
-  return `https://${year}.adventjs.dev/challenges/${year}/${day}`;
+  if (year === parseInt(CURRENT_YEAR)) {
+    return `https://adventjs.dev/challenges/${year}/${day}`;
+  } else {
+    return `https://${year}.adventjs.dev/challenges/${year}/${day}`;
+  }
 };

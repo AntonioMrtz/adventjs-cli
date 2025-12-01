@@ -14,7 +14,7 @@ AdventJS CLI Generator – Spin up your [AdventJS challenges](https://adventjs.d
   - 🎨 Formatting (Prettier)
   - 🤖 GitHub Actions for CI
   - 🖥️ VSCode integration
-- 📅 Ready for 2024 challenges
+- 📅 Ready for 2024 & 2025 challenges
 
 Focus on solving the challenges, not setting them up! 🚀
 
