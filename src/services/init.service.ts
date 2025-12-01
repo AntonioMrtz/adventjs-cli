@@ -34,7 +34,7 @@ const handleInit = async (): Promise<void> => {
   );
 
   const dev = isDev();
-  let year = '2024';
+  let year = '2024'; // Default year
   let tests = true;
   let configFiles = true;
   let dependencies = true;
