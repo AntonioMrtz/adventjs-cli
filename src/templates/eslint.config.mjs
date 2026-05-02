@@ -11,7 +11,7 @@ export default [
       '**/dist',
       '**/*.js',
       '*.config.js',
-      'jest.config.js',
+      'vitest.config.ts',
     ],
   },
   js.configs.recommended,

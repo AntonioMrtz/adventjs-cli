@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "ES2022",
     "jsx": "react",
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "downlevelIteration": true,
     "outDir": "./dist",
     "rootDir": "./src"
   },
@@ -18,7 +17,7 @@
     "**/src/examples/**",
     "**/templates/**",
     ".vscode",
-    "jest.config.js",
+    "vitest.config.js",
     "**/adventjs**/*.spec.ts",
     "**/adventjs**/"
   ]

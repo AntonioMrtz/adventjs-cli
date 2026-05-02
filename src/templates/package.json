@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "AdventJS {{year}} Challenges",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "dev": "npx tsc 01/01.ts && node 01/01.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "dev": "npx tsc 01/01.ts && node 01/01.js"
+    "test": "vitest",
+    "test:watch": "vitest --watch"
   },
   "keywords": [],
   "author": "",

@@ -53,7 +53,7 @@ enum CONFIG_FILE {
   PRETTIER = '.prettierrc',
   PRETTIER_IGNORE = '.prettierignore',
   ESLINT = 'eslint.config.mjs',
-  JEST = 'jest.config.js',
+  VITEST = 'vitest.config.js',
   TSCONFIG = 'tsconfig.json',
   GITHUB = '.github',
   README = 'README.md',

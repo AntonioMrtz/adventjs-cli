@@ -8,7 +8,7 @@ AdventJS CLI Generator – Spin up your [AdventJS challenges](https://adventjs.d
   - 🧪 Associated test file to validate your code
 - ⚙️ Out-of-the-box support for
   - 🐞 Debugging
-  - 🧪 Testing with Jest
+  - 🧪 Testing with Vitest
   - 🛠️ TypeScript config
   - 🧹 Linting (ESLint)
   - 🎨 Formatting (Prettier)
