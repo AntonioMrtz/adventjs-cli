@@ -98,7 +98,7 @@ const handleInit = async (): Promise<void> => {
 
   createRootFolder(userInput.year);
 
-  generateConfig(userInput.year, userInput.tests, userInput.dependencies);
+  generateConfig(userInput.year, userInput.tests);
 
   await _generateProject(userInput.generateProject, userInput.year);
   await _generateGitProject(userInput.generateGitProject, userInput.year);
