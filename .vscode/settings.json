@@ -10,7 +10,7 @@
     "dist": true,
     "node_modules": true
   },
-  "cSpell.userWords": ["adventjs", "cli", "nvmrc", "puppeteer", "vitest"],
+  "cSpell.userWords": ["adventjs", "adventjs-cli", "cli", "nvmrc", "puppeteer", "vitest"],
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
   },

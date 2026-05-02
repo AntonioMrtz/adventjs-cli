@@ -1,5 +1,6 @@
 {
   "editor.formatOnSave": true,
+  "cSpell.words": ["adventjs-cli", "adventjs"],
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.tabSize": 2,
