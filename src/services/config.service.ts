@@ -59,14 +59,9 @@ const parseConfig = async (): Promise<ConfigSchema | null> => {
   }
 };
 
-const generateConfig = (
-  year: string,
-  tests: boolean,
-  configFiles: boolean,
-  dependencies: boolean,
-): void => {
+const generateConfig = (year: string, tests: boolean): void => {
   console.log(chalk.blue('Generating configuration file...'));
-  const config = { year, tests, vscode: configFiles, dependencies };
+  const config = { year, tests };
   createFile(
     year,
     SavePath.ROOT,

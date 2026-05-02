@@ -1,24 +1,14 @@
-# 🎄 AdventJS-CLI
+# 🎄 adventjs-cli
 
-AdventJS CLI Generator – Spin up your [AdventJS challenges](https://adventjs.dev/) in seconds! 🎄⚡. Available in [npm](https://www.npmjs.com/package/adventjs-cli).
+<img src="src/assets/adventjs-cli.png" width="300" />
 
-- 📝 Instantly generates the boilerplate for each daily AdventJS challenge
-  - 🗂️ TypeScript function template (ready for your solution)
-  - 📄 Problem description in markdown
-  - 🧪 Associated test file to validate your code
-- ⚙️ Out-of-the-box support for
-  - 🐞 Debugging
-  - 🧪 Testing with Jest
-  - 🛠️ TypeScript config
-  - 🧹 Linting (ESLint)
-  - 🎨 Formatting (Prettier)
-  - 🤖 GitHub Actions for CI
-  - 🖥️ VSCode integration
-- 📅 Ready for 2024 & 2025 challenges
+The all-in-one command-line tool for [AdventJS challenges](https://adventjs.dev/). Save hours of repetitive setup with a single command and focus on solving, not configuring.
 
-Focus on solving the challenges, not setting them up! 🚀
+- Generates a TypeScript solution template, problem docs, and unit tests
+- Fully preconfigured environment with debugging, linting, formatting, and CI
+- Consistent workflow every year, built from personal experience
 
-## How to use it
+## 👋 How to use it
 
 ### 1️⃣ Initialize your project
 
@@ -48,43 +38,6 @@ Replace `<day>` with the challenge day number (e.g., `1`, `5`, `25`).
 npx adventjs-cli g 1
 ```
 
-### 🔧 DEV MODE
+## 🔧 Dev docs
 
-### Run
-
-```bash
-npm run start
-```
-
-### Publish package
-
-```bash
-npm publish
-```
-
-### Publish package using pipelines
-
-1. Change `package.json` and `APP_VERSION` version number.
-2. Push changes
-3. Create tag with version v.x.x
-4. Push tags
-
-#### Debug package content
-
-```bash
-npm pack --dry-run
-```
-
-### Debug package
-
-#### Generate package from root
-
-```bash
-npm run build && chmod +x dist/index.js
-```
-
-#### Install while being on the generated folder
-
-```bash
-npm install ../ && npx adventjs-cli init
-```
+Follow [dev docs](docs/DEV.md) for more info.

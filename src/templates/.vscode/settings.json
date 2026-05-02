@@ -1,10 +1,11 @@
 {
   "editor.formatOnSave": true,
+  "editor.inlineSuggest.enabled": "{{AIInlineSuggestions}}",
+  "cSpell.words": ["adventjs-cli", "adventjs"],
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.tabSize": 2, // Sets the number of spaces per tab
-    "editor.insertSpaces": true, // Converts tabs to spaces
-    "editor.detectIndentation": false // Prevents auto-detection of indentation style
-  },
-  "jest.runMode": "on-save"
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  }
 }

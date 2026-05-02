@@ -6,10 +6,6 @@ interface TestsAnswer {
   tests: boolean;
 }
 
-interface ConfigFilesAnswer {
-  configFiles: boolean;
-}
-
 interface DependenciesAnswer {
   dependencies: boolean;
 }
@@ -22,11 +18,20 @@ interface GenerateGitProjectAnswer {
   generateGitProject: boolean;
 }
 
+interface HuskyAnswer {
+  husky: boolean;
+}
+
+interface AIInlineSuggestionsAnswer {
+  AIInlineSuggestions: boolean;
+}
+
 export {
   YearAnswer,
   TestsAnswer,
-  ConfigFilesAnswer,
   DependenciesAnswer,
   GenerateProjectAnswer,
   GenerateGitProjectAnswer,
+  HuskyAnswer,
+  AIInlineSuggestionsAnswer,
 };

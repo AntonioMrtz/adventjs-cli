@@ -1,21 +1,22 @@
-const _coreDependencies = ['adventjs-cli'];
-const _testsDevDependencies = ['@types/jest', 'jest', 'ts-jest', 'eslint-plugin-mocha'];
-const _prettierDevDependencies = ['prettier'];
+const _coreDependencies = ['adventjs-cli'] as const;
+const TEST_DEV_DEPENDENCIES = ['vitest'] as const;
+const HUSKY_DEV_DEPENDENCIES = ['husky'] as const;
+const _prettierDevDependencies = ['prettier'] as const;
 const _eslintDevDependencies = [
+  '@eslint/js',
   'eslint',
   '@typescript-eslint/parser',
   '@typescript-eslint/eslint-plugin',
   'eslint-config-prettier',
   'eslint-plugin-prettier',
-];
-const _typescriptDevDependencies = ['typescript', 'ts-node'];
+] as const;
+const _typescriptDevDependencies = ['typescript', 'tsx'] as const;
 
-const DEV_DEPENDENCIES = [
+const REQUIRED_DEV_DEPENDENCIES = [
   ..._coreDependencies,
-  ..._testsDevDependencies,
   ..._prettierDevDependencies,
   ..._eslintDevDependencies,
   ..._typescriptDevDependencies,
-];
+] as const;
 
-export { DEV_DEPENDENCIES };
+export { REQUIRED_DEV_DEPENDENCIES, TEST_DEV_DEPENDENCIES, HUSKY_DEV_DEPENDENCIES };
