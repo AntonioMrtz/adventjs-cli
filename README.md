@@ -1,22 +1,14 @@
 # 🎄 AdventJS-CLI
 
-AdventJS CLI Generator – Spin up your [AdventJS challenges](https://adventjs.dev/) in seconds! 🎄⚡. Available in [npm](https://www.npmjs.com/package/adventjs-cli).
+<img src="src/assets/adventjs-cli.png" width="300" />
 
-- 📝 Instantly generates the boilerplate for each daily AdventJS challenge
-  - 🗂️ TypeScript function template (ready for your solution)
-  - 📄 Problem description in markdown
-  - 🧪 Associated test file to validate your code
-- ⚙️ Out-of-the-box support for
-  - 🐞 Debugging
-  - 🧪 Testing with Vitest
-  - 🛠️ TypeScript config
-  - 🧹 Linting (ESLint)
-  - 🎨 Formatting (Prettier)
-  - 🤖 GitHub Actions for CI
-  - 🖥️ VSCode integration
-- 📅 Ready for 2024 & 2025 challenges
+The all-in-one command-line tool for [AdventJS challenges](https://adventjs.dev/). Save hours of repetitive setup with a single command and focus on solving, not configuring.
 
-Focus on solving the challenges, not setting them up! 🚀
+What adventjs-cli provides:
+
+- Generates a TypeScript solution template, problem docs, and unit tests
+- Fully preconfigured environment with debugging, linting, formatting, and CI
+- Consistent workflow every year, built from personal experience
 
 ## How to use it
 
