@@ -1,5 +1,5 @@
 const _coreDependencies = ['adventjs-cli'];
-const _testsDevDependencies = ['vitest', '@types/vitest'];
+const _testsDevDependencies = ['vitest'];
 const _prettierDevDependencies = ['prettier'];
 const _eslintDevDependencies = [
   'eslint',

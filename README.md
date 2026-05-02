@@ -77,14 +77,22 @@ npm pack --dry-run
 
 ### Debug package
 
-#### Generate package from root
+#### 1. Generate package from root project
 
 ```bash
 npm run build && chmod +x dist/index.js
 ```
 
-#### Install while being on the generated folder
+#### 2. Install the package
+
+Create a temp folder
 
 ```bash
-npm install ../ && npx adventjs-cli init
+mkdir /tmp/adventjs-test && cd /tmp/adventjs-test
+```
+
+Install the package from the repo path
+
+```bash
+ npm i /path/to/repo && npx adventjs-cli init
 ```

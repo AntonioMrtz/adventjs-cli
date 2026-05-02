@@ -28,7 +28,6 @@ export default [
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
-      mocha: 'eslint-plugin-mocha',
     },
     rules: {
       indent: ['error', 2],

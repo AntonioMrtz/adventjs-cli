@@ -17,7 +17,7 @@
     "**/src/examples/**",
     "**/templates/**",
     ".vscode",
-    "vitest.config.js",
+    "vitest.config.ts",
     "**/adventjs**/*.spec.ts",
     "**/adventjs**/"
   ]
