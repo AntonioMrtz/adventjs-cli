@@ -4,16 +4,22 @@
     "moduleResolution": "nodenext",
     "target": "ES2022",
     "strict": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "esModuleInterop": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "types": ["vitest/globals", "node"]
   },
+  "include": [
+    "src/index.ts",
+    "src/services/**/*.ts",
+    "src/schema/**/*.ts",
+    "src/types/**/*.ts",
+    "src/__tests__/**/*.ts"
+  ],
   "exclude": [
     "node_modules",
     "dist",
-    "src/__tests__",
     "src/examples",
     "src/templates",
     "src/assets",

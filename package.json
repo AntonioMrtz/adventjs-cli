@@ -25,7 +25,7 @@
     "get:challenges": "./scripts/get-all-challenges.sh",
     "dev": "DEV=true tsx src/index.ts && npm run copy:files",
     "copy:files": "node scripts/copy-files.js",
-    "build": "rm -rf dist/ && tsc && npm run copy:files",
+    "build": "rm -rf dist/ && tsc && npm run copy:files && rm -rf dist/__tests__",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write .",
