@@ -1,4 +1,7 @@
-dist
-node_modules
-.github
+.github/**
+.vscode/**
 **/examples/**
+**/dist/**
+**/node_modules/**
+**/coverage/**
+**/package-lock.json
