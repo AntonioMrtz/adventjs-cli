@@ -94,5 +94,5 @@ mkdir /tmp/adventjs-test && cd /tmp/adventjs-test
 Install the package from the repo path
 
 ```bash
- npm i /path/to/repo && npx adventjs-cli init
+npm i /path/to/repo && npx adventjs-cli init
 ```
