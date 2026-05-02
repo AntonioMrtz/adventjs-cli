@@ -1,6 +1,5 @@
 /* eslint-disable quotes */
 import { getChallengeDataFromJson, getChallengeUrl } from '../services/scrapping.service';
-import { describe, it, expect } from 'vitest';
 
 describe('Scrapping Service', () => {
   describe('2024', () => {

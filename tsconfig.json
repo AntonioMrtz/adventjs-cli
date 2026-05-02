@@ -1,5 +1,5 @@
 {
-  "compilerOptions": {
+"compilerOptions": {
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "target": "ES2022",
@@ -9,16 +9,6 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "outDir": "./dist",
-    "rootDir": "./src"
-  },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/src/examples/**",
-    "**/templates/**",
-    ".vscode",
-    "vitest.config.ts",
-    "**/adventjs**/*.spec.ts",
-    "**/adventjs**/"
-  ]
-}
+    "rootDir": "./src",
+    "types": ["vitest", "node"]
+  }
