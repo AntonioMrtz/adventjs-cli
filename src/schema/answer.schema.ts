@@ -22,6 +22,10 @@ interface HuskyAnswer {
   husky: boolean;
 }
 
+interface AIInlineSuggestionsAnswer {
+  AIInlineSuggestions: boolean;
+}
+
 export {
   YearAnswer,
   TestsAnswer,
@@ -29,4 +33,5 @@ export {
   GenerateProjectAnswer,
   GenerateGitProjectAnswer,
   HuskyAnswer,
+  AIInlineSuggestionsAnswer,
 };

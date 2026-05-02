@@ -7,11 +7,13 @@ import {
   GenerateProjectAnswer,
   GenerateGitProjectAnswer,
   HuskyAnswer,
+  AIInlineSuggestionsAnswer,
 } from '../schema/answer.schema';
 import { spawn } from 'child_process';
 import {
   CONFIG_FILE,
   copyFromTemplates,
+  copyFromTemplatesWithReplacements,
   copyFromTemplatesWithYearReplacement,
   createRootFolder,
   getRootFolderName,
@@ -43,6 +45,7 @@ const handleInit = async (): Promise<void> => {
     generateProject: true,
     generateGitProject: true,
     husky: true,
+    AIInlineSuggestions: true,
   };
 
   if (!dev) {
@@ -94,6 +97,14 @@ const handleInit = async (): Promise<void> => {
       default: true,
     });
     userInput.husky = huskyAnswer.husky;
+
+    const AIInlineSuggestions = await inquirer.prompt<AIInlineSuggestionsAnswer>({
+      type: 'confirm',
+      name: 'AIInlineSuggestions',
+      message: 'Do you want to enable AI inline suggestions?',
+      default: true,
+    });
+    userInput.AIInlineSuggestions = AIInlineSuggestions.AIInlineSuggestions;
   }
 
   createRootFolder(userInput.year);
@@ -107,6 +118,7 @@ const handleInit = async (): Promise<void> => {
 
   _generateConfigFiles(userInput.year, {
     tests: userInput.tests,
+    AIInlineSuggestions: userInput.AIInlineSuggestions,
   });
 
   await _installDependencies(userInput.dependencies, userInput.year, {
@@ -221,13 +233,14 @@ const _generateConfigFiles = (
   year: string,
   options: {
     tests: boolean;
+    AIInlineSuggestions: boolean;
   },
 ): void => {
   _generateGitignore(year);
   _generateEslintConfig(year);
   _generatePrettierConfig(year);
+  _generateVscodeConfig(year, options.AIInlineSuggestions);
   _generateNvmrc(year);
-  _generateVscodeConfig(year);
   _generateReadme(year);
   _generateGithubConfig(year);
 
@@ -243,8 +256,16 @@ const _generateTsConfig = (year: string): void => {
   console.log(chalk.blue('Generating tsconfig.json file...'));
 };
 
-const _generateVscodeConfig = (year: string): void => {
+const _generateVscodeConfig = (year: string, AIInlineSuggestions: boolean): void => {
   copyFromTemplates(year, CONFIG_FILE.VSCODE);
+
+  copyFromTemplatesWithReplacements(
+    year,
+    CONFIG_FILE.VSCODE_SETTINGS,
+    CONFIG_FILE.VSCODE_SETTINGS,
+    { AIInlineSuggestions: AIInlineSuggestions },
+  );
+
   console.log(chalk.blue('Generating VSCode configuration...'));
 };
 

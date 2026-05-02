@@ -12,6 +12,7 @@ export {
   copyFromTemplates,
   _replaceYearPlaceholder,
   copyFromTemplatesWithYearReplacement,
+  copyFromTemplatesWithReplacements,
   CONFIG_FILE,
   isConfigFileInCurrentDirectory,
 };
@@ -50,6 +51,7 @@ enum CONFIG_FILE {
   GITIGNORE_TEMPLATE = '.gitignore.template',
   GITIGNORE = '.gitignore',
   VSCODE = '.vscode',
+  VSCODE_SETTINGS = '.vscode/settings.json',
   PRETTIER = '.prettierrc',
   PRETTIER_IGNORE = '.prettierignore',
   ESLINT = 'eslint.config.mjs',
@@ -191,4 +193,38 @@ const copyFromTemplatesWithYearReplacement = (
     fileContent = _replaceYearPlaceholder(fileContent, year);
     writeFileSync(destinationPath, fileContent, 'utf-8');
   }
+};
+
+const copyFromTemplatesWithReplacements = (
+  year: string | number,
+  sourceFileName: CONFIG_FILE,
+  destinationFileName: string,
+  replacements: Record<string, string | number | boolean>,
+): void => {
+  const rootFolder = getRootFolderName(year);
+  const rootFolderPath = join(process.cwd(), rootFolder);
+
+  const templateSourcePath = join(__dirname, '..', 'templates', sourceFileName);
+  const destinationPath = join(rootFolderPath, destinationFileName);
+
+  let fileContent = readFileSync(templateSourcePath, 'utf-8');
+
+  // Replace all placeholders
+  for (const [key, value] of Object.entries(replacements)) {
+    const placeholder = `"{{${key}}}"`;
+
+    let replacement;
+
+    if (typeof value === 'string') {
+      replacement = `"${value}"`;
+    } else if (typeof value === 'boolean' || typeof value === 'number') {
+      replacement = String(value);
+    } else {
+      throw new Error(`Unsupported replacement type for key "${key}": ${typeof value}`);
+    }
+
+    fileContent = fileContent.split(placeholder).join(replacement);
+  }
+
+  writeFileSync(destinationPath, fileContent, 'utf-8');
 };
