@@ -58,6 +58,7 @@ enum CONFIG_FILE {
   GITHUB = '.github',
   README = 'README.md',
   PACKAGE_JSON = 'package.json',
+  HUSKY_DIR = '.husky',
 }
 
 const createFile = (

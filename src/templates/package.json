@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "prepare": "test -d node_modules/husky && husky || echo 'husky not installed, skipping'"
   },
   "keywords": [],
   "author": "",

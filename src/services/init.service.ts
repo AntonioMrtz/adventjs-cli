@@ -3,13 +3,12 @@ import inquirer from 'inquirer';
 import {
   DependenciesAnswer,
   TestsAnswer,
-  ConfigFilesAnswer,
   YearAnswer,
   GenerateProjectAnswer,
   GenerateGitProjectAnswer,
+  HuskyAnswer,
 } from '../schema/answer.schema';
 import { spawn } from 'child_process';
-import { DEV_DEPENDENCIES } from '../schema/dependencies.schema';
 import {
   CONFIG_FILE,
   copyFromTemplates,
@@ -22,6 +21,7 @@ import { generateConfig } from './config.service';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { CURRENT_YEAR, SUPPORTED_YEARS } from '../schema/app.schema';
+import { getDevDependencies } from './dependencies.service';
 
 export { handleInit };
 
@@ -35,12 +35,15 @@ const handleInit = async (): Promise<void> => {
   );
 
   const dev = isDev();
-  let year = CURRENT_YEAR; // Default year
-  let tests = true;
-  let configFiles = true;
-  let dependencies = true;
-  let generateProject = true;
-  let generateGitProject = true;
+
+  const userInput = {
+    year: CURRENT_YEAR,
+    tests: true,
+    dependencies: true,
+    generateProject: true,
+    generateGitProject: true,
+    husky: true,
+  };
 
   if (!dev) {
     const yearAnswer = await inquirer.prompt<YearAnswer>({
@@ -50,7 +53,7 @@ const handleInit = async (): Promise<void> => {
       choices: SUPPORTED_YEARS,
       default: CURRENT_YEAR,
     });
-    year = yearAnswer.year;
+    userInput.year = yearAnswer.year;
 
     const testsAnswer = await inquirer.prompt<TestsAnswer>({
       type: 'confirm',
@@ -58,16 +61,7 @@ const handleInit = async (): Promise<void> => {
       message: 'Do you want to use tests? (Recommended)',
       default: true,
     });
-    tests = testsAnswer.tests;
-
-    const configFilesAnswer = await inquirer.prompt<ConfigFilesAnswer>({
-      type: 'confirm',
-      name: 'configFiles',
-      message:
-        'Do you want to generate config files for Prettier, VSCode, and other tools? (Recommended)',
-      default: true,
-    });
-    configFiles = configFilesAnswer.configFiles;
+    userInput.tests = testsAnswer.tests;
 
     const dependenciesAnswer = await inquirer.prompt<DependenciesAnswer>({
       type: 'confirm',
@@ -75,7 +69,7 @@ const handleInit = async (): Promise<void> => {
       message: 'Do you want to install dependencies? (Recommended)',
       default: true,
     });
-    dependencies = dependenciesAnswer.dependencies;
+    userInput.dependencies = dependenciesAnswer.dependencies;
 
     const generateProjectAnswer = await inquirer.prompt<GenerateProjectAnswer>({
       type: 'confirm',
@@ -83,7 +77,7 @@ const handleInit = async (): Promise<void> => {
       message: 'Do you want to generate the AdventJS project now?',
       default: true,
     });
-    generateProject = generateProjectAnswer.generateProject;
+    userInput.generateProject = generateProjectAnswer.generateProject;
 
     const generateGitProjectAnswer = await inquirer.prompt<GenerateGitProjectAnswer>({
       type: 'confirm',
@@ -91,27 +85,49 @@ const handleInit = async (): Promise<void> => {
       message: 'Do you want to generate a git project?',
       default: true,
     });
-    generateGitProject = generateGitProjectAnswer.generateGitProject;
+    userInput.generateGitProject = generateGitProjectAnswer.generateGitProject;
+
+    const huskyAnswer = await inquirer.prompt<HuskyAnswer>({
+      type: 'confirm',
+      name: 'husky',
+      message: 'Do you want to add Husky pre-commit hooks (format & lint)?',
+      default: true,
+    });
+    userInput.husky = huskyAnswer.husky;
   }
 
-  createRootFolder(year);
+  createRootFolder(userInput.year);
 
-  generateConfig(year, tests, configFiles, dependencies);
+  generateConfig(userInput.year, userInput.tests, userInput.dependencies);
 
-  await _generateProject(generateProject, year);
-  await _generateGitProject(generateGitProject, year);
+  _generateProject(userInput.generateProject, userInput.year);
+  await _generateGitProject(userInput.generateGitProject, userInput.year);
 
-  _generateTsConfig(year);
+  _generateTsConfig(userInput.year);
 
-  _generateConfigFiles(configFiles, year);
+  _generateConfigFiles(userInput.year, {
+    tests: userInput.tests,
+  });
 
-  await _installDependencies(dependencies, year);
+  await _installDependencies(userInput.dependencies, userInput.year, {
+    husky: userInput.husky,
+    tests: userInput.tests,
+  });
+
+  await _installHusky(userInput.husky, userInput.year);
 
   console.log(chalk.bold.green('🎉 Your AdventJS project is ready! Happy coding!'));
-  console.log(chalk.bold.green('🚀 To get started, cd ' + getRootFolderName(year)));
+  console.log(chalk.bold.green('🚀 To get started, cd ' + getRootFolderName(userInput.year)));
 };
 
-const _installDependencies = (shouldInstall: boolean, year: string): Promise<void> => {
+const _installDependencies = (
+  shouldInstall: boolean,
+  year: string,
+  options: {
+    husky: boolean;
+    tests: boolean;
+  },
+): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (!shouldInstall) {
       resolve();
@@ -119,7 +135,9 @@ const _installDependencies = (shouldInstall: boolean, year: string): Promise<voi
     }
     console.log(chalk.blue('Installing dependencies... (this may take a few moments)'));
 
-    const child = spawn('npm', ['install', '--save-dev', ...DEV_DEPENDENCIES], {
+    const devDependencies = getDevDependencies(options);
+
+    const child = spawn('npm', ['install', '--save-dev', ...devDependencies], {
       cwd: getRootFolderName(year),
       stdio: 'inherit',
     });
@@ -143,26 +161,22 @@ const _installDependencies = (shouldInstall: boolean, year: string): Promise<voi
   });
 };
 
-const _generateProject = (shouldGenerate: boolean, year: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    if (!shouldGenerate) {
-      resolve();
-      return;
-    }
-    console.log(chalk.blue('Generating AdventJS project...'));
-    try {
-      copyFromTemplatesWithYearReplacement(year, CONFIG_FILE.PACKAGE_JSON);
-      console.log(chalk.green('✅ AdventJS project generated successfully'));
-      resolve();
-    } catch (error) {
-      console.error(
-        chalk.red(
-          `❌ Error generating project: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        ),
-      );
-      reject(error);
-    }
-  });
+const _generateProject = (shouldGenerate: boolean, year: string): void => {
+  if (!shouldGenerate) {
+    return;
+  }
+  console.log(chalk.blue('Generating AdventJS project...'));
+
+  try {
+    copyFromTemplatesWithYearReplacement(year, CONFIG_FILE.PACKAGE_JSON);
+    console.log(chalk.green('✅ AdventJS project generated successfully'));
+  } catch (error) {
+    console.error(
+      chalk.red(
+        `❌ Error generating project: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      ),
+    );
+  }
 };
 
 const _generateGitProject = (shouldGenerate: boolean, year: string): Promise<void> => {
@@ -196,18 +210,25 @@ const _generateGitProject = (shouldGenerate: boolean, year: string): Promise<voi
     });
   });
 };
-const _generateConfigFiles = (shouldGenerate: boolean, year: string): void => {
-  if (shouldGenerate) {
-    _generateGitignore(year);
-    _generateEslintConfig(year);
-    _generatePrettierConfig(year);
-    _generateVscodeConfig(year);
-    _generateReadme(year);
-    _generateTestsConfig(year);
-    _generateGithubConfig(year);
 
-    console.log(chalk.green('✅ Configuration files generated'));
+const _generateConfigFiles = (
+  year: string,
+  options: {
+    tests: boolean;
+  },
+): void => {
+  _generateGitignore(year);
+  _generateEslintConfig(year);
+  _generatePrettierConfig(year);
+  _generateVscodeConfig(year);
+  _generateReadme(year);
+  _generateGithubConfig(year);
+
+  if (options.tests) {
+    _generateTestsConfig(year);
   }
+
+  console.log(chalk.green('✅ Configuration files generated'));
 };
 
 const _generateTsConfig = (year: string): void => {
@@ -249,6 +270,37 @@ const _generatePrettierConfig = (year: string): void => {
 const _generateGithubConfig = (year: string): void => {
   copyFromTemplates(year, CONFIG_FILE.GITHUB);
   console.log(chalk.blue('Generating GitHub configuration...'));
+};
+
+const _installHusky = async (shouldInstall: boolean, year: string): Promise<void> => {
+  if (!shouldInstall) {
+    return;
+  }
+
+  copyFromTemplates(year, CONFIG_FILE.HUSKY_DIR);
+
+  return new Promise((resolve, reject) => {
+    console.log(chalk.blue('Installing Husky...'));
+    const child = spawn('npx', ['husky'], {
+      cwd: getRootFolderName(year),
+      stdio: 'inherit',
+    });
+
+    child.on('close', (code: number) => {
+      if (code !== 0) {
+        console.error(chalk.red(`❌ Error installing Husky: process exited with code ${code}`));
+        reject(new Error(`Husky installation failed with code ${code}`));
+        return;
+      }
+      console.log(chalk.green('✅ Husky installed successfully'));
+      resolve();
+    });
+
+    child.on('error', (error: Error) => {
+      console.error(chalk.red(`❌ Error installing Husky: ${error.message}`));
+      reject(error);
+    });
+  });
 };
 
 const _displayAsciiArt = (): void => {
