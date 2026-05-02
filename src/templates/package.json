@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "AdventJS {{year}} Challenges",
   "scripts": {
-    "dev": "npx tsc 01/01.ts && node 01/01.js",
+    "dev": "tsx 01/01.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",

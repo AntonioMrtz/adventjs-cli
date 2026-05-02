@@ -9,7 +9,7 @@ const _eslintDevDependencies = [
   'eslint-config-prettier',
   'eslint-plugin-prettier',
 ];
-const _typescriptDevDependencies = ['typescript', 'ts-node'];
+const _typescriptDevDependencies = ['typescript', 'tsx'];
 
 const DEV_DEPENDENCIES = [
   ..._coreDependencies,

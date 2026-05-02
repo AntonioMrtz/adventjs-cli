@@ -21,9 +21,9 @@
     "dist/"
   ],
   "scripts": {
-    "start": "tsc && npm run copy:files && node dist/index.js",
+    "start": "tsx src/index.ts && npm run copy:files",
     "get:challenges": "./scripts/get-all-challenges.sh",
-    "dev": "DEV=true tsc && DEV=true npm run copy:files && DEV=true node dist/index.js",
+    "dev": "DEV=true tsx src/index.ts && npm run copy:files",
     "copy:files": "node scripts/copy-files.js",
     "build": "rm -rf dist/ && tsc && npm run copy:files",
     "lint": "eslint . --ext .ts",
@@ -50,7 +50,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.6.2",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.3",
     "vitest": "^4.1.5"
