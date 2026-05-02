@@ -3,9 +3,7 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "target": "ES2022",
-    "jsx": "react",
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
+    "strict": true,
     "sourceMap": true,
     "esModuleInterop": true,
     "outDir": "./dist",
@@ -15,11 +13,11 @@
   "exclude": [
     "node_modules",
     "dist",
-    "**/src/examples/**",
-    "**/templates/**",
+    "src/__tests__",
+    "src/examples",
+    "src/templates",
+    "src/assets",
     ".vscode",
-    "vitest.config.ts",
-    "**/adventjs**/*.spec.ts",
-    "**/adventjs**/"
+    "vitest.config.ts"
   ]
 }
