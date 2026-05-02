@@ -3,23 +3,27 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "target": "ES2022",
-    "jsx": "react",
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "sourceMap": true,
+    "strict": true,
+    "sourceMap": false,
     "esModuleInterop": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "types": ["vitest/globals", "node"]
   },
+  "include": [
+    "src/index.ts",
+    "src/services/**/*.ts",
+    "src/schema/**/*.ts",
+    "src/types/**/*.ts",
+    "src/__tests__/**/*.ts"
+  ],
   "exclude": [
     "node_modules",
     "dist",
-    "**/src/examples/**",
-    "**/templates/**",
+    "src/examples",
+    "src/templates",
+    "src/assets",
     ".vscode",
-    "vitest.config.ts",
-    "**/adventjs**/*.spec.ts",
-    "**/adventjs**/"
+    "vitest.config.ts"
   ]
 }
