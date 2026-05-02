@@ -11,7 +11,7 @@
   "license": "Attribution-NonCommercial-ShareAlike 4.0 International",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AntonioMrtz/adventjs-cli.git"
+    "url": "https://github.com/AntonioMrtz/adventjs-cli"
   },
   "main": "dist/index.js",
   "bin": {
@@ -31,7 +31,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "prepare": "husky"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -49,6 +50,7 @@
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
     "prettier": "^3.6.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
