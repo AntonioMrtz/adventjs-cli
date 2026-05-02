@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "ES2022",
     "jsx": "react",
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "downlevelIteration": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "types": ["vitest/globals", "node"]
   },
   "exclude": [
     "node_modules",
@@ -18,7 +18,7 @@
     "**/src/examples/**",
     "**/templates/**",
     ".vscode",
-    "jest.config.js",
+    "vitest.config.ts",
     "**/adventjs**/*.spec.ts",
     "**/adventjs**/"
   ]

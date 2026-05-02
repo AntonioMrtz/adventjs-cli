@@ -1,7 +1,8 @@
 const _coreDependencies = ['adventjs-cli'];
-const _testsDevDependencies = ['@types/jest', 'jest', 'ts-jest', 'eslint-plugin-mocha'];
+const _testsDevDependencies = ['vitest'];
 const _prettierDevDependencies = ['prettier'];
 const _eslintDevDependencies = [
+  '@eslint/js',
   'eslint',
   '@typescript-eslint/parser',
   '@typescript-eslint/eslint-plugin',

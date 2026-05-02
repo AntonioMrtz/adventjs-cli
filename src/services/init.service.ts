@@ -226,7 +226,7 @@ const _generateReadme = (year: string): void => {
 };
 
 const _generateTestsConfig = (year: string): void => {
-  copyFromTemplates(year, CONFIG_FILE.JEST);
+  copyFromTemplates(year, CONFIG_FILE.VITEST);
   console.log(chalk.blue('Generating tests configuration...'));
 };
 
