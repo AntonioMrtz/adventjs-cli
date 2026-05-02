@@ -100,7 +100,7 @@ const handleInit = async (): Promise<void> => {
 
   generateConfig(userInput.year, userInput.tests, userInput.dependencies);
 
-  _generateProject(userInput.generateProject, userInput.year);
+  await _generateProject(userInput.generateProject, userInput.year);
   await _generateGitProject(userInput.generateGitProject, userInput.year);
 
   _generateTsConfig(userInput.year);
