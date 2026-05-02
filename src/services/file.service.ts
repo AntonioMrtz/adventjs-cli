@@ -211,7 +211,17 @@ const copyFromTemplatesWithReplacements = (
   // Replace all placeholders
   for (const [key, value] of Object.entries(replacements)) {
     const placeholder = `"{{${key}}}"`;
-    const replacement = typeof value === 'boolean' ? String(value) : `"${value}"`;
+
+    let replacement;
+
+    if (typeof value === 'string') {
+      replacement = `"${value}"`;
+    } else if (typeof value === 'boolean' || typeof value === 'number') {
+      replacement = String(value);
+    } else {
+      throw new Error(`Unsupported replacement type for key "${key}": ${typeof value}`);
+    }
+
     fileContent = fileContent.split(placeholder).join(replacement);
   }
 
