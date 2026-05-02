@@ -61,6 +61,7 @@ enum CONFIG_FILE {
   README = 'README.md',
   PACKAGE_JSON = 'package.json',
   HUSKY_DIR = '.husky',
+  NVMRC = '.nvmrc',
 }
 
 const createFile = (

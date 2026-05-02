@@ -240,6 +240,7 @@ const _generateConfigFiles = (
   _generateEslintConfig(year);
   _generatePrettierConfig(year);
   _generateVscodeConfig(year, options.AIInlineSuggestions);
+  _generateNvmrc(year);
   _generateReadme(year);
   _generateGithubConfig(year);
 
@@ -292,6 +293,11 @@ const _generatePrettierConfig = (year: string): void => {
   copyFromTemplates(year, CONFIG_FILE.PRETTIER);
   copyFromTemplates(year, CONFIG_FILE.PRETTIER_IGNORE);
   console.log(chalk.blue('Generating Prettier configuration...'));
+};
+
+const _generateNvmrc = (year: string): void => {
+  copyFromTemplates(year, CONFIG_FILE.NVMRC);
+  console.log(chalk.blue('Generating .nvmrc file...'));
 };
 
 const _generateGithubConfig = (year: string): void => {
