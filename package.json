@@ -1,6 +1,6 @@
 {
   "name": "adventjs-cli",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": " Spin up your AdventJS challenges by @midudev in seconds! 🎄⚡ ",
   "author": {
     "name": "Antonio Martinez Fernandez",

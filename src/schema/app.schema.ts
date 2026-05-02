@@ -1,5 +1,5 @@
 const APP_NAME = 'adventjs-cli';
-const APP_VERSION = '1.6.2';
+const APP_VERSION = '1.7.0';
 
 const APP_DESCRIPTION = `AdventJS CLI Generator – Spin up your AdventJS challenges in seconds! 🎄⚡
 
