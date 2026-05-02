@@ -112,9 +112,10 @@ const handleInit = async (): Promise<void> => {
   await _installDependencies(userInput.dependencies, userInput.year, {
     husky: userInput.husky,
     tests: userInput.tests,
+    gitProject: userInput.generateGitProject,
   });
 
-  await _installHusky(userInput.husky, userInput.year);
+  await _installHusky(userInput.husky && userInput.generateGitProject, userInput.year);
 
   console.log(chalk.bold.green('🎉 Your AdventJS project is ready! Happy coding!'));
   console.log(chalk.bold.green('🚀 To get started, cd ' + getRootFolderName(userInput.year)));
@@ -126,6 +127,7 @@ const _installDependencies = (
   options: {
     husky: boolean;
     tests: boolean;
+    gitProject: boolean;
   },
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -161,22 +163,26 @@ const _installDependencies = (
   });
 };
 
-const _generateProject = (shouldGenerate: boolean, year: string): void => {
-  if (!shouldGenerate) {
-    return;
-  }
-  console.log(chalk.blue('Generating AdventJS project...'));
-
-  try {
-    copyFromTemplatesWithYearReplacement(year, CONFIG_FILE.PACKAGE_JSON);
-    console.log(chalk.green('✅ AdventJS project generated successfully'));
-  } catch (error) {
-    console.error(
-      chalk.red(
-        `❌ Error generating project: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      ),
-    );
-  }
+const _generateProject = (shouldGenerate: boolean, year: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (!shouldGenerate) {
+      resolve();
+      return;
+    }
+    console.log(chalk.blue('Generating AdventJS project...'));
+    try {
+      copyFromTemplatesWithYearReplacement(year, CONFIG_FILE.PACKAGE_JSON);
+      console.log(chalk.green('✅ AdventJS project generated successfully'));
+      resolve();
+    } catch (error) {
+      console.error(
+        chalk.red(
+          `❌ Error generating project: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        ),
+      );
+      reject(error);
+    }
+  });
 };
 
 const _generateGitProject = (shouldGenerate: boolean, year: string): Promise<void> => {

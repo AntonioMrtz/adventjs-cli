@@ -6,10 +6,14 @@ import {
 
 export { getDevDependencies };
 
-const getDevDependencies = (options: { husky?: boolean; tests?: boolean }): string[] => {
+const getDevDependencies = (options: {
+  husky: boolean;
+  tests: boolean;
+  gitProject: boolean;
+}): string[] => {
   const dependencies: string[] = [...REQUIRED_DEV_DEPENDENCIES];
 
-  if (options.husky) {
+  if (options.husky && options.gitProject) {
     dependencies.push(...HUSKY_DEV_DEPENDENCIES);
   }
 
