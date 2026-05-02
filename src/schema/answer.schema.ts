@@ -22,8 +22,8 @@ interface HuskyAnswer {
   husky: boolean;
 }
 
-interface CopilotAnswer {
-  copilot: boolean;
+interface AIInlineSuggestionsAnswer {
+  AIInlineSuggestions: boolean;
 }
 
 export {
@@ -33,5 +33,5 @@ export {
   GenerateProjectAnswer,
   GenerateGitProjectAnswer,
   HuskyAnswer,
-  CopilotAnswer,
+  AIInlineSuggestionsAnswer,
 };
