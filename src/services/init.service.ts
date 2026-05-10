@@ -130,7 +130,11 @@ const handleInit = async (): Promise<void> => {
   await _installHusky(userInput.husky && userInput.generateGitProject, userInput.year);
 
   console.log(chalk.bold.green('🎉 Your AdventJS project is ready! Happy coding!'));
-  console.log(chalk.bold.green('🚀 To get started, cd ' + getRootFolderName(userInput.year)));
+  console.log(
+    chalk.bold.green(
+      '🚀 To get started, cd ' + getRootFolderName(userInput.year) + '&& npx adventjs-cli g 1',
+    ),
+  );
 };
 
 const _installDependencies = (
