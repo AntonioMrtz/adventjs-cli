@@ -1,6 +1,6 @@
 # 🎄 adventjs-cli
 
-<img src="src/assets/adventjs-cli.png" width="300" />
+<img src="src/assets/adventjs-cli.jpeg" width="300" />
 
 The all-in-one command-line tool for [AdventJS challenges](https://adventjs.dev/). Save hours of repetitive setup with a single command and focus on solving, not configuring.
 
