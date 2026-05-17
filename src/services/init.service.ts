@@ -132,7 +132,7 @@ const handleInit = async (): Promise<void> => {
   console.log(chalk.bold.green('🎉 Your AdventJS project is ready! Happy coding!'));
   console.log(
     chalk.bold.green(
-      '🚀 To get started, cd ' + getRootFolderName(userInput.year) + '&& npx adventjs-cli g 1',
+      `🚀 To get started, cd ${getRootFolderName(userInput.year)} && npx adventjs-cli g 1`,
     ),
   );
 };
