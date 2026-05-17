@@ -7,6 +7,7 @@ const APP_DESCRIPTION = `AdventJS CLI Generator – Spin up your AdventJS challe
 📖 Adds challenge description in Markdown format
 ⚙️ Handles project init, dependencies, and config automatically
 📅 Ready for 2024 & 2025 challenges!
+🌐 Web: https://antoniomrtz.github.io/adventjs-cli-web/
 
 Focus on solving the challenges, not setting them up! 🚀`;
 

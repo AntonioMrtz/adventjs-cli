@@ -135,6 +135,9 @@ const handleInit = async (): Promise<void> => {
       `🚀 To get started, cd ${getRootFolderName(userInput.year)} && npx adventjs-cli g 1`,
     ),
   );
+  console.log(
+    chalk.bold.green('🌐 Visit our website: https://antoniomrtz.github.io/adventjs-cli-web/'),
+  );
 };
 
 const _installDependencies = (
