@@ -1,7 +1,20 @@
 {
   "name": "adventjs-cli",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": " Spin up your AdventJS challenges by @midudev in seconds! 🎄⚡ ",
+  "keywords": [
+    "adventjs",
+    "adventjs-cli",
+    "midudev",
+    "adventjs-challenges",
+    "cli",
+    "scaffolding",
+    "boilerplate",
+    "coding-challenges",
+    "typescript",
+    "javascript",
+    "nodejs"
+  ],
   "author": {
     "name": "Antonio Martinez Fernandez",
     "email": "antoniomartinezfernandez17@gmail.com",
